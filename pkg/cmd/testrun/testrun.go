@@ -15,5 +15,6 @@ func NewCmdTestrun(f *cmdutil.Factory) *cobra.Command {
 	cmd.AddCommand(NewCmdCreate(f))
 	cmd.AddCommand(NewCmdResult(f))
 	cmd.AddCommand(NewCmdAddRecord(f))
+	cmd.AddCommand(NewCmdRecords(f))
 	return cmd
 }
