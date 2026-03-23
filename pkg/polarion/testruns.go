@@ -104,6 +104,29 @@ func (c *Client) CreateTestRun(ctx context.Context, in TestRunInput) (*TestRun, 
 	return c.GetTestRun(ctx, resp.Data[0].ID)
 }
 
+func (c *Client) UpdateTestRun(ctx context.Context, id string, in TestRunInput) (*TestRun, error) {
+	attrs := map[string]any{}
+	if in.Title != "" {
+		attrs["title"] = in.Title
+	}
+	if in.Template != "" {
+		attrs["templateId"] = in.Template
+	}
+	body := map[string]any{
+		"data": map[string]any{
+			"type":       "testruns",
+			"id":         id,
+			"attributes": attrs,
+		},
+	}
+	path := fmt.Sprintf("/projects/%s/testruns/%s", c.project, id)
+	_, err := c.makeRequest(ctx, "PATCH", path, body)
+	if err != nil {
+		return nil, fmt.Errorf("update test run %s: %w", id, err)
+	}
+	return c.GetTestRun(ctx, id)
+}
+
 func (c *Client) DeleteTestRun(ctx context.Context, id string) error {
 	path := fmt.Sprintf("/projects/%s/testruns/%s", c.project, id)
 	_, err := c.makeRequest(ctx, "DELETE", path, nil)
