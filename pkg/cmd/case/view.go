@@ -46,8 +46,8 @@ func NewCmdView(f *cmdutil.Factory) *cobra.Command {
 				return nil
 			}
 
-			fmt.Fprintf(f.IOStreams.Out, "ID:     %s\nTitle:  %s\nType:   %s\nStatus: %s\nURL:    %s\n",
-				item.ID, item.Title, item.Type, item.Status, item.URL)
+			fmt.Fprintf(f.IOStreams.Out, "ID:          %s\nTitle:       %s\nType:        %s\nStatus:      %s\nAuthor:      %s\nDescription: %s\nURL:         %s\n",
+				item.ID, item.Title, item.Type, item.Status, item.Author, item.Description, item.URL)
 			return nil
 		},
 	}
