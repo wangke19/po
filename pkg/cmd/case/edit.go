@@ -11,13 +11,18 @@ import (
 )
 
 func NewCmdEdit(f *cmdutil.Factory) *cobra.Command {
-	var title, desc, status, jsonFields string
+	var title, wiType, desc, status, jsonFields string
 
 	cmd := &cobra.Command{
 		Use:   "edit <id>",
 		Short: "Edit a test case",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			if !cmd.Flags().Changed("title") && !cmd.Flags().Changed("type") &&
+				!cmd.Flags().Changed("description") && !cmd.Flags().Changed("status") {
+				return fmt.Errorf("at least one of --title, --type, --description, or --status must be provided")
+			}
+
 			client, err := f.PolarionClient()
 			if err != nil {
 				return err
@@ -26,6 +31,9 @@ func NewCmdEdit(f *cmdutil.Factory) *cobra.Command {
 			input := polarion.WorkItemInput{}
 			if cmd.Flags().Changed("title") {
 				input.Title = title
+			}
+			if cmd.Flags().Changed("type") {
+				input.Type = wiType
 			}
 			if cmd.Flags().Changed("status") {
 				input.Status = status
@@ -58,6 +66,7 @@ func NewCmdEdit(f *cmdutil.Factory) *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&title, "title", "t", "", "New title")
+	cmd.Flags().StringVar(&wiType, "type", "", "New work item type")
 	cmd.Flags().StringVarP(&desc, "description", "d", "", "New description")
 	cmd.Flags().StringVar(&status, "status", "", "New status")
 	cmd.Flags().StringVar(&jsonFields, "json", "", "Output JSON (optional field list)")

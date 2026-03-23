@@ -6,6 +6,33 @@ import (
 	"fmt"
 )
 
+func (c *Client) GetProject(ctx context.Context, id string) (*Project, error) {
+	path := fmt.Sprintf("/projects/%s", id)
+	data, err := c.makeRequest(ctx, "GET", path, nil)
+	if err != nil {
+		return nil, fmt.Errorf("get project %s: %w", id, err)
+	}
+
+	var resp struct {
+		Data struct {
+			ID         string `json:"id"`
+			Attributes struct {
+				Name        string `json:"name"`
+				Description string `json:"description"`
+			} `json:"attributes"`
+		} `json:"data"`
+	}
+	if err := json.Unmarshal(data, &resp); err != nil {
+		return nil, fmt.Errorf("parse response: %w", err)
+	}
+
+	return &Project{
+		ID:          resp.Data.ID,
+		Name:        resp.Data.Attributes.Name,
+		Description: resp.Data.Attributes.Description,
+	}, nil
+}
+
 func (c *Client) ListProjects(ctx context.Context) ([]Project, error) {
 	data, err := c.makeRequest(ctx, "GET", "/projects", nil)
 	if err != nil {
