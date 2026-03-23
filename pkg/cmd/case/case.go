@@ -15,5 +15,6 @@ func NewCmdCase(f *cmdutil.Factory) *cobra.Command {
 	cmd.AddCommand(NewCmdCreate(f))
 	cmd.AddCommand(NewCmdEdit(f))
 	cmd.AddCommand(NewCmdTransition(f))
+	cmd.AddCommand(NewCmdDelete(f))
 	return cmd
 }
