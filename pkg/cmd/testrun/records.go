@@ -10,7 +10,7 @@ import (
 )
 
 func NewCmdRecords(f *cmdutil.Factory) *cobra.Command {
-	var caseFilter, jsonFields string
+	var caseFilter, resultFilter, jsonFields string
 
 	cmd := &cobra.Command{
 		Use:   "records <run-id>",
@@ -31,6 +31,16 @@ func NewCmdRecords(f *cmdutil.Factory) *cobra.Command {
 				filtered := records[:0]
 				for _, r := range records {
 					if r.CaseID == caseFilter {
+						filtered = append(filtered, r)
+					}
+				}
+				records = filtered
+			}
+
+			if cmd.Flags().Changed("result") {
+				filtered := records[:0]
+				for _, r := range records {
+					if r.Result == resultFilter {
 						filtered = append(filtered, r)
 					}
 				}
@@ -58,6 +68,7 @@ func NewCmdRecords(f *cmdutil.Factory) *cobra.Command {
 	}
 
 	cmd.Flags().StringVar(&caseFilter, "case", "", "Filter by test case ID")
+	cmd.Flags().StringVar(&resultFilter, "result", "", "Filter by result: passed, failed, blocked")
 	cmd.Flags().StringVar(&jsonFields, "json", "", "Output as JSON with specified fields (comma-separated)")
 	return cmd
 }

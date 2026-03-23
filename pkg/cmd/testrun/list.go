@@ -62,7 +62,7 @@ func NewCmdList(f *cmdutil.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&status, "status", "", "Filter by status")
 	cmd.Flags().StringVar(&template, "template", "", "Filter by template ID")
 	cmd.Flags().StringVarP(&query, "query", "q", "", "Lucene query")
-	cmd.Flags().IntVar(&limit, "limit", 30, "Max results")
+	cmd.Flags().IntVar(&limit, "limit", 50, "Max results")
 	cmd.Flags().StringVar(&jsonFields, "json", "", "Output as JSON with specified fields (comma-separated)")
 	return cmd
 }
