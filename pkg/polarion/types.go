@@ -34,3 +34,17 @@ type TestResult struct {
 	Result  string `json:"result"` // passed|failed|blocked
 	Comment string `json:"comment,omitempty"`
 }
+
+type TestRecord struct {
+	CaseID  string `json:"caseId"`
+	Result  string `json:"result"` // passed|failed|blocked|""
+	Comment string `json:"comment,omitempty"`
+}
+
+type TestRunProgress struct {
+	Total   int `json:"total"`
+	Passed  int `json:"passed"`
+	Failed  int `json:"failed"`
+	Blocked int `json:"blocked"`
+	NotRun  int `json:"notRun"`
+}
