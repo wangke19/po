@@ -12,6 +12,7 @@ func NewCmdConfig(f *cmdutil.Factory) *cobra.Command {
 	}
 
 	cmd.AddCommand(NewCmdList(f))
+	cmd.AddCommand(NewCmdGet(f))
 	cmd.AddCommand(NewCmdSet(f))
 	cmd.AddCommand(NewCmdUnset(f))
 	return cmd
