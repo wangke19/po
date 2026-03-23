@@ -10,9 +10,8 @@ import (
 )
 
 func NewCmdList(f *cmdutil.Factory) *cobra.Command {
-	var query string
+	var status, query, jsonFields string
 	var limit int
-	var jsonFields string
 
 	cmd := &cobra.Command{
 		Use:   "list",
@@ -22,10 +21,21 @@ func NewCmdList(f *cmdutil.Factory) *cobra.Command {
 			if err != nil {
 				return err
 			}
-			runs, err := client.ListTestRuns(cmd.Context(), query, limit)
+
+			var parts []string
+			if cmd.Flags().Changed("status") {
+				parts = append(parts, "status:"+status)
+			}
+			if query != "" {
+				parts = append(parts, query)
+			}
+			q := strings.Join(parts, " AND ")
+
+			runs, err := client.ListTestRuns(cmd.Context(), q, limit)
 			if err != nil {
 				return fmt.Errorf("list test runs: %w", err)
 			}
+
 			if cmd.Flags().Changed("json") {
 				fields := strings.Split(jsonFields, ",")
 				if jsonFields == "" {
@@ -38,12 +48,15 @@ func NewCmdList(f *cmdutil.Factory) *cobra.Command {
 				fmt.Fprintln(f.IOStreams.Out, string(out))
 				return nil
 			}
+
 			for _, r := range runs {
 				fmt.Fprintf(f.IOStreams.Out, "%s\t%s\t%s\n", r.ID, r.Status, r.Title)
 			}
 			return nil
 		},
 	}
+
+	cmd.Flags().StringVar(&status, "status", "", "Filter by status")
 	cmd.Flags().StringVarP(&query, "query", "q", "", "Lucene query")
 	cmd.Flags().IntVar(&limit, "limit", 30, "Max results")
 	cmd.Flags().StringVar(&jsonFields, "json", "", "Output as JSON with specified fields (comma-separated)")
