@@ -1,0 +1,37 @@
+Product Requirement Document for command line po
+research https://github.com/wangke19/cli, I plan to create one similar polarion cli tool like gh and implement all functions of https://github.com/wangke19/polarion-mcp-server#, The purpose is
+    to achieve support for the invocation of AI agents，this tool named po which supports AI Agent invocation throupo its core features of structured output, inherited authentication, and a rich command set.
+    
+Here is how it works and the main methods:
+1. Structured Output (Machine-Readable)
+This is the most critical feature that allows AI Agents to effectively invoke po. Commands can output data in JSON format, not just human-readable text.
+
+How to Use: Add the --jsonparameter to most commands, specifying the fields to output.
+    
+po case list --json number,title,author,url
+
+Significance for Agents: AI Agents can easily parse JSON data, extract structured information (like case numbers, case status, case names), and use it for logical decision-making and subsequent actions.
+
+2. Powerful po apiCommand (Direct REST API Calls)
+The po apicommand is a powerful tool provided by pofor automation and integration. It allows direct calls to any GitHub REST API endpoint and automatically handles authentication.
+
+    How to Use: po api <endpoint-path>, e.g., po api /repos/{owner}/{repo}/issues
+    
+Significance for Agents: Agents do not need to manually construct HTTP requests or manage auth tokens. po apiprovides a unified, secure entry point to all GitHub functionalities. Agents can programmatically combine these commands to complete complex workflows.
+
+3. Integrated Authentication
+The po auth logincommand establishes long-term authentication for the user. Once a user authenticates in the terminal, any AI Agent running pocommands within the same user context​ automatically inherits this authentication state.
+
+    Significance for Agents: The Agent itself does not need to handle sensitive tokens. As long as it is launched in an already authenticated environment, it automatically has the permissions to execute commands (scoped according to the user's login). This greatly simplifies the secure integration of Agents.
+
+4. Scriptable Command-Line Interface
+The pocommand is designed with scripting in mind:
+
+    Clear Exit Codes: Clear signals for success or failure.
+    Non-Interactive Mode: Provide parameters via flags (e.g., -tfor title, -bfor body) or standard input, avoiding prompts that require human interaction.
+    
+Significance for Agents: Agents can reliably execute pocommands like regular shell commands and predict their behavior.
+
+5. Rich Subcommands Covering Core Workflows
+poprovides native support for core features like case, testrun, workitems, and Codespace. Agents can use these high-level commands instead of constructing operations from low-level APIs.
+    

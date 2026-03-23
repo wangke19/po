@@ -1,0 +1,119 @@
+package auth
+
+import (
+	"context"
+	"crypto/tls"
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+	"strings"
+
+	"github.com/spf13/cobra"
+	"github.com/wangke19/po/internal/config"
+	"github.com/wangke19/po/pkg/cmdutil"
+	"github.com/zalando/go-keyring"
+	"golang.org/x/term"
+)
+
+type loginOptions struct {
+	hostname  string
+	project   string
+	withToken bool
+}
+
+func NewCmdLogin(f *cmdutil.Factory) *cobra.Command {
+	opts := &loginOptions{}
+
+	cmd := &cobra.Command{
+		Use:   "login",
+		Short: "Authenticate with a Polarion instance",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return runLogin(f, opts)
+		},
+	}
+
+	cmd.Flags().StringVar(&opts.hostname, "hostname", "", "Polarion instance URL (required)")
+	cmd.Flags().StringVar(&opts.project, "project", "", "Default Polarion project ID (required)")
+	cmd.Flags().BoolVar(&opts.withToken, "with-token", false, "Read token from stdin")
+	_ = cmd.MarkFlagRequired("hostname")
+	_ = cmd.MarkFlagRequired("project")
+
+	return cmd
+}
+
+func runLogin(f *cmdutil.Factory, opts *loginOptions) error {
+	hostname := config.NormalizeHostname(opts.hostname)
+
+	var token string
+	if opts.withToken {
+		data, err := io.ReadAll(f.IOStreams.In)
+		if err != nil {
+			return fmt.Errorf("reading token from stdin: %w", err)
+		}
+		token = strings.TrimSpace(string(data))
+	} else {
+		fmt.Fprint(f.IOStreams.Out, "Token: ")
+		raw, err := term.ReadPassword(int(os.Stdin.Fd()))
+		if err != nil {
+			return fmt.Errorf("reading token: %w", err)
+		}
+		fmt.Fprintln(f.IOStreams.Out)
+		token = strings.TrimSpace(string(raw))
+	}
+
+	if token == "" {
+		return fmt.Errorf("token cannot be empty")
+	}
+
+	if err := validateToken(hostname, opts.project, token); err != nil {
+		return fmt.Errorf("authentication failed: %w", err)
+	}
+
+	if err := keyring.Set("po", hostname, token); err != nil {
+		return fmt.Errorf("storing token in keyring: %w", err)
+	}
+
+	cfg, err := f.Config()
+	if err != nil {
+		return err
+	}
+	if err := cfg.SetHost(hostname, opts.project, true); err != nil {
+		return fmt.Errorf("saving config: %w", err)
+	}
+
+	fmt.Fprintf(f.IOStreams.Out, "Logged in to %s as project %s\n", hostname, opts.project)
+	return nil
+}
+
+func validateToken(hostname, project, token string) error {
+	url := fmt.Sprintf("https://%s/polarion/rest/v1/projects/%s", hostname, project)
+	req, err := http.NewRequestWithContext(context.Background(), "GET", url, nil)
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Accept", "application/json")
+
+	client := &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		},
+	}
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == 401 {
+		return fmt.Errorf("invalid token (HTTP 401)")
+	}
+	if resp.StatusCode == 404 {
+		return fmt.Errorf("project %q not found (HTTP 404)", project)
+	}
+	if resp.StatusCode >= 400 {
+		return fmt.Errorf("server returned HTTP %d", resp.StatusCode)
+	}
+	return nil
+}

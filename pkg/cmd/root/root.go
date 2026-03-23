@@ -1,0 +1,20 @@
+package root
+
+import (
+	"github.com/spf13/cobra"
+	authCmd "github.com/wangke19/po/pkg/cmd/auth"
+	"github.com/wangke19/po/pkg/cmdutil"
+)
+
+func NewCmdRoot(f *cmdutil.Factory, version string) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:           "po <command> <subcommand> [flags]",
+		Short:         "Polarion CLI",
+		Long:          "Work seamlessly with Polarion ALM from the command line.",
+		SilenceErrors: true,
+		SilenceUsage:  true,
+	}
+
+	cmd.AddCommand(authCmd.NewCmdAuth(f))
+	return cmd
+}
