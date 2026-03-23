@@ -10,20 +10,32 @@ import (
 )
 
 func NewCmdSearch(f *cmdutil.Factory) *cobra.Command {
-	var jsonFields string
+	var wiType, status, jsonFields string
 	var limit int
 
 	cmd := &cobra.Command{
-		Use:   "search <query>",
-		Short: "Search work items with a Lucene query",
-		Args:  cobra.ExactArgs(1),
+		Use:   "search [query]",
+		Short: "Search work items with optional Lucene query and filters",
+		Args:  cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			client, err := f.PolarionClient()
 			if err != nil {
 				return err
 			}
 
-			items, err := client.ListWorkItems(cmd.Context(), args[0], limit)
+			var parts []string
+			if cmd.Flags().Changed("type") {
+				parts = append(parts, "type:"+wiType)
+			}
+			if cmd.Flags().Changed("status") {
+				parts = append(parts, "status:"+status)
+			}
+			if len(args) > 0 && args[0] != "" {
+				parts = append(parts, args[0])
+			}
+			q := strings.Join(parts, " AND ")
+
+			items, err := client.ListWorkItems(cmd.Context(), q, limit)
 			if err != nil {
 				return fmt.Errorf("search: %w", err)
 			}
@@ -48,6 +60,8 @@ func NewCmdSearch(f *cmdutil.Factory) *cobra.Command {
 		},
 	}
 
+	cmd.Flags().StringVar(&wiType, "type", "", "Filter by work item type")
+	cmd.Flags().StringVar(&status, "status", "", "Filter by status")
 	cmd.Flags().IntVar(&limit, "limit", 30, "Max results")
 	cmd.Flags().StringVar(&jsonFields, "json", "", "Output as JSON with specified fields (comma-separated)")
 	return cmd
