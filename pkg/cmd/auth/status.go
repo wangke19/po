@@ -12,6 +12,12 @@ import (
 	"github.com/zalando/go-keyring"
 )
 
+type hostStatus struct {
+	Host        string `json:"host"`
+	Project     string `json:"project"`
+	TokenStatus string `json:"tokenStatus"`
+}
+
 func NewCmdStatus(f *cmdutil.Factory) *cobra.Command {
 	var jsonFields string
 
@@ -32,23 +38,14 @@ func NewCmdStatus(f *cmdutil.Factory) *cobra.Command {
 				return nil
 			}
 
-			type hostStatus struct {
-				Host        string `json:"host"`
-				Project     string `json:"project"`
-				TokenStatus string `json:"tokenStatus"`
-			}
-
 			statuses := make([]hostStatus, 0, len(hosts))
 			for _, host := range hosts {
 				proj, _ := cfg.DefaultProject(host)
 				ts := "token set"
 				if os.Getenv("POLARION_TOKEN") != "" {
 					ts = "env"
-				} else {
-					_, kerr := keyring.Get("po", host)
-					if kerr != nil {
-						ts = "no token"
-					}
+				} else if _, kerr := keyring.Get("po", host); kerr != nil {
+					ts = "no token"
 				}
 				statuses = append(statuses, hostStatus{Host: host, Project: proj, TokenStatus: ts})
 			}
