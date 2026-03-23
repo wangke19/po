@@ -104,6 +104,64 @@ func (c *Client) CreateTestRun(ctx context.Context, in TestRunInput) (*TestRun, 
 	return c.GetTestRun(ctx, resp.Data[0].ID)
 }
 
+func (c *Client) GetTestRunRecords(ctx context.Context, runID string) ([]TestRecord, error) {
+	path := fmt.Sprintf("/projects/%s/testruns/%s/testrecords", c.project, runID)
+	data, err := c.makeRequest(ctx, "GET", path, nil)
+	if err != nil {
+		return nil, fmt.Errorf("get test run records %s: %w", runID, err)
+	}
+
+	var resp struct {
+		Data []struct {
+			ID         string `json:"id"`
+			Attributes struct {
+				Result  string `json:"result"`
+				Comment struct {
+					Value string `json:"value"`
+				} `json:"comment"`
+			} `json:"attributes"`
+			Relationships struct {
+				TestCase struct {
+					Data struct {
+						ID string `json:"id"`
+					} `json:"data"`
+				} `json:"testCase"`
+			} `json:"relationships"`
+		} `json:"data"`
+	}
+	if err := json.Unmarshal(data, &resp); err != nil {
+		return nil, fmt.Errorf("parse response: %w", err)
+	}
+
+	records := make([]TestRecord, len(resp.Data))
+	for i, d := range resp.Data {
+		records[i] = TestRecord{
+			CaseID:  d.Relationships.TestCase.Data.ID,
+			Result:  d.Attributes.Result,
+			Comment: d.Attributes.Comment.Value,
+		}
+	}
+	return records, nil
+}
+
+func (c *Client) UpdateTestRunStatus(ctx context.Context, runID, status string) (*TestRun, error) {
+	body := map[string]any{
+		"data": map[string]any{
+			"type": "testruns",
+			"id":   runID,
+			"attributes": map[string]any{
+				"status": status,
+			},
+		},
+	}
+	path := fmt.Sprintf("/projects/%s/testruns/%s", c.project, runID)
+	_, err := c.makeRequest(ctx, "PATCH", path, body)
+	if err != nil {
+		return nil, fmt.Errorf("update test run status %s: %w", runID, err)
+	}
+	return c.GetTestRun(ctx, runID)
+}
+
 func (c *Client) UpdateTestRunResult(ctx context.Context, runID, caseID string, result TestResult) error {
 	body := map[string]any{
 		"data": map[string]any{
