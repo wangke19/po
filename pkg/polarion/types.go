@@ -59,3 +59,11 @@ type TestStepInput struct {
 	Action         string `json:"action"`
 	ExpectedResult string `json:"expectedResult"`
 }
+
+type Attachment struct {
+	ID          string `json:"id"`
+	FileName    string `json:"fileName"`
+	Title       string `json:"title"`
+	ContentType string `json:"contentType"`
+	Size        int64  `json:"size"`
+}
