@@ -93,3 +93,20 @@ func TestCreateWorkItem_emptyResponse(t *testing.T) {
 		t.Error("expected error for empty response")
 	}
 }
+
+func TestListTestRuns(t *testing.T) {
+	client := newTestClient(t, func(w http.ResponseWriter, r *http.Request) {
+		json.NewEncoder(w).Encode(map[string]any{
+			"data": []map[string]any{
+				{"id": "TR-1", "attributes": map[string]any{"title": "Sprint 1 Run", "status": "inprogress"}},
+			},
+		})
+	})
+	runs, err := client.ListTestRuns(context.Background(), "", 10)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(runs) != 1 || runs[0].ID != "TR-1" {
+		t.Errorf("unexpected runs: %+v", runs)
+	}
+}
