@@ -35,6 +35,7 @@ func New(version string) *Factory {
 		if err != nil {
 			return nil, err
 		}
+		// host error is non-fatal here: VerifySSL defaults to true when host is empty
 		host, _ := cfg.DefaultHost()
 		verifySSL := cfg.VerifySSL(host)
 		transport := http.DefaultTransport.(*http.Transport).Clone()
