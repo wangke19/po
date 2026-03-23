@@ -72,3 +72,10 @@ type WorkItemLink struct {
 	TargetID string `json:"targetId"`
 	Role     string `json:"role"`
 }
+
+type Comment struct {
+	ID      string `json:"id"`
+	Author  string `json:"author"`
+	Created string `json:"created"`
+	Body    string `json:"body"`
+}
