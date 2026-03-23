@@ -10,7 +10,7 @@ import (
 )
 
 func NewCmdList(f *cmdutil.Factory) *cobra.Command {
-	var wiType, query, jsonFields string
+	var wiType, status, query, jsonFields string
 	var limit int
 
 	cmd := &cobra.Command{
@@ -22,10 +22,17 @@ func NewCmdList(f *cmdutil.Factory) *cobra.Command {
 				return err
 			}
 
-			q := fmt.Sprintf("type:%s", wiType)
-			if query != "" {
-				q += " AND " + query
+			var parts []string
+			if cmd.Flags().Changed("type") {
+				parts = append(parts, "type:"+wiType)
 			}
+			if cmd.Flags().Changed("status") {
+				parts = append(parts, "status:"+status)
+			}
+			if query != "" {
+				parts = append(parts, query)
+			}
+			q := strings.Join(parts, " AND ")
 
 			items, err := client.ListWorkItems(cmd.Context(), q, limit)
 			if err != nil {
@@ -52,10 +59,10 @@ func NewCmdList(f *cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&wiType, "type", "", "Work item type (required)")
+	cmd.Flags().StringVar(&wiType, "type", "", "Filter by work item type")
+	cmd.Flags().StringVar(&status, "status", "", "Filter by status")
 	cmd.Flags().StringVarP(&query, "query", "q", "", "Additional Lucene query")
 	cmd.Flags().IntVar(&limit, "limit", 30, "Max results")
 	cmd.Flags().StringVar(&jsonFields, "json", "", "Output as JSON with specified fields (comma-separated)")
-	_ = cmd.MarkFlagRequired("type")
 	return cmd
 }
