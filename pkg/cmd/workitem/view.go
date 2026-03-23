@@ -5,11 +5,13 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
+	"github.com/wangke19/po/pkg/browser"
 	"github.com/wangke19/po/pkg/cmdutil"
 	"github.com/wangke19/po/pkg/jsonfields"
 )
 
 func NewCmdView(f *cmdutil.Factory) *cobra.Command {
+	var web bool
 	var jsonFields string
 
 	cmd := &cobra.Command{
@@ -25,6 +27,10 @@ func NewCmdView(f *cmdutil.Factory) *cobra.Command {
 			item, err := client.GetWorkItem(cmd.Context(), args[0])
 			if err != nil {
 				return fmt.Errorf("get work item %q: %w", args[0], err)
+			}
+
+			if web {
+				return browser.Open(item.URL)
 			}
 
 			if cmd.Flags().Changed("json") {
@@ -46,6 +52,7 @@ func NewCmdView(f *cmdutil.Factory) *cobra.Command {
 		},
 	}
 
+	cmd.Flags().BoolVarP(&web, "web", "w", false, "Open in browser")
 	cmd.Flags().StringVar(&jsonFields, "json", "", "Output JSON with specified fields")
 	return cmd
 }
