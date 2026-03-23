@@ -14,5 +14,6 @@ func NewCmdTestcase(f *cmdutil.Factory) *cobra.Command {
 	cmd.AddCommand(NewCmdSteps(f))
 	cmd.AddCommand(NewCmdStepAdd(f))
 	cmd.AddCommand(NewCmdStepRemove(f))
+	cmd.AddCommand(NewCmdStepEdit(f))
 	return cmd
 }

@@ -46,6 +46,28 @@ func (c *Client) DeleteTestStep(ctx context.Context, caseID string, stepIndex in
 	return c.GetTestSteps(ctx, caseID)
 }
 
+func (c *Client) UpdateTestStep(ctx context.Context, caseID string, stepIndex int, in TestStepInput) ([]TestStep, error) {
+	attrs := map[string]any{}
+	if in.Action != "" {
+		attrs["action"] = in.Action
+	}
+	if in.ExpectedResult != "" {
+		attrs["expectedResult"] = in.ExpectedResult
+	}
+	body := map[string]any{
+		"data": map[string]any{
+			"type":       "teststeps",
+			"attributes": attrs,
+		},
+	}
+	path := fmt.Sprintf("/projects/%s/workitems/%s/teststeps/%d", c.project, caseID, stepIndex)
+	_, err := c.makeRequest(ctx, "PATCH", path, body)
+	if err != nil {
+		return nil, fmt.Errorf("update test step %s/%d: %w", caseID, stepIndex, err)
+	}
+	return c.GetTestSteps(ctx, caseID)
+}
+
 func (c *Client) AddTestStep(ctx context.Context, caseID string, in TestStepInput) ([]TestStep, error) {
 	body := map[string]any{
 		"data": []map[string]any{{
