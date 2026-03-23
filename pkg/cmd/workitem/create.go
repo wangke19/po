@@ -11,7 +11,7 @@ import (
 )
 
 func NewCmdCreate(f *cmdutil.Factory) *cobra.Command {
-	var wiType, title, desc, jsonFields string
+	var wiType, title, desc, status, jsonFields string
 
 	cmd := &cobra.Command{
 		Use:   "create",
@@ -25,6 +25,7 @@ func NewCmdCreate(f *cmdutil.Factory) *cobra.Command {
 			item, err := client.CreateWorkItem(cmd.Context(), polarion.WorkItemInput{
 				Type:        wiType,
 				Title:       title,
+				Status:      status,
 				Description: desc,
 			})
 			if err != nil {
@@ -51,6 +52,7 @@ func NewCmdCreate(f *cmdutil.Factory) *cobra.Command {
 
 	cmd.Flags().StringVar(&wiType, "type", "", "Work item type (required)")
 	cmd.Flags().StringVarP(&title, "title", "t", "", "Title (required)")
+	cmd.Flags().StringVar(&status, "status", "", "Initial status")
 	cmd.Flags().StringVarP(&desc, "description", "d", "", "Description")
 	cmd.Flags().StringVar(&jsonFields, "json", "", "Output JSON (optional field list)")
 	_ = cmd.MarkFlagRequired("type")

@@ -2,6 +2,7 @@ package comment
 
 import (
 	"fmt"
+	"io"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -17,6 +18,14 @@ func NewCmdAdd(f *cmdutil.Factory) *cobra.Command {
 		Short: "Add a comment to a work item",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			if body == "-" {
+				data, err := io.ReadAll(f.IOStreams.In)
+				if err != nil {
+					return fmt.Errorf("read stdin: %w", err)
+				}
+				body = strings.TrimRight(string(data), "\n")
+			}
+
 			client, err := f.PolarionClient()
 			if err != nil {
 				return err
