@@ -12,6 +12,7 @@ func NewCmdRun(f *cmdutil.Factory) *cobra.Command {
 	}
 
 	cmd.AddCommand(NewCmdStatus(f))
+	cmd.AddCommand(NewCmdStart(f))
 	cmd.AddCommand(NewCmdFinish(f))
 	return cmd
 }

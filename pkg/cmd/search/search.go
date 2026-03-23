@@ -10,7 +10,7 @@ import (
 )
 
 func NewCmdSearch(f *cmdutil.Factory) *cobra.Command {
-	var wiType, status, jsonFields string
+	var wiType, status, author, jsonFields string
 	var limit int
 
 	cmd := &cobra.Command{
@@ -29,6 +29,9 @@ func NewCmdSearch(f *cmdutil.Factory) *cobra.Command {
 			}
 			if cmd.Flags().Changed("status") {
 				parts = append(parts, "status:"+status)
+			}
+			if cmd.Flags().Changed("author") {
+				parts = append(parts, "author:"+author)
 			}
 			if len(args) > 0 && args[0] != "" {
 				parts = append(parts, args[0])
@@ -62,6 +65,7 @@ func NewCmdSearch(f *cmdutil.Factory) *cobra.Command {
 
 	cmd.Flags().StringVar(&wiType, "type", "", "Filter by work item type")
 	cmd.Flags().StringVar(&status, "status", "", "Filter by status")
+	cmd.Flags().StringVar(&author, "author", "", "Filter by author")
 	cmd.Flags().IntVar(&limit, "limit", 30, "Max results")
 	cmd.Flags().StringVar(&jsonFields, "json", "", "Output as JSON with specified fields (comma-separated)")
 	return cmd
