@@ -48,3 +48,14 @@ type TestRunProgress struct {
 	Blocked int `json:"blocked"`
 	NotRun  int `json:"notRun"`
 }
+
+type TestStep struct {
+	StepIndex      int    `json:"stepIndex"`
+	Action         string `json:"action"`
+	ExpectedResult string `json:"expectedResult"`
+}
+
+type TestStepInput struct {
+	Action         string `json:"action"`
+	ExpectedResult string `json:"expectedResult"`
+}
