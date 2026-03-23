@@ -62,7 +62,7 @@ func NewCmdList(f *cmdutil.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&status, "status", "", "Filter by status")
 	cmd.Flags().StringVar(&author, "author", "", "Filter by author")
 	cmd.Flags().StringVarP(&query, "query", "q", "", "Lucene query to filter results")
-	cmd.Flags().IntVar(&limit, "limit", 30, "Maximum number of results")
+	cmd.Flags().IntVar(&limit, "limit", 50, "Maximum number of results")
 	cmd.Flags().StringVar(&jsonFields, "json", "", "Output as JSON with specified fields (comma-separated)")
 	return cmd
 }

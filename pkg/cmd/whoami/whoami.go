@@ -40,24 +40,28 @@ func NewCmdWhoami(f *cmdutil.Factory) *cobra.Command {
 				return err
 			}
 
+			projectURL := fmt.Sprintf("https://%s/polarion/#/project/%s", host, project)
+
 			if cmd.Flags().Changed("json") {
 				type output struct {
-					Host    string `json:"host"`
-					Project string `json:"project"`
-					ID      string `json:"id"`
-					Name    string `json:"name"`
-					Email   string `json:"email"`
+					Host       string `json:"host"`
+					Project    string `json:"project"`
+					ProjectURL string `json:"projectUrl"`
+					ID         string `json:"id"`
+					Name       string `json:"name"`
+					Email      string `json:"email"`
 				}
 				fields := strings.Split(jsonFields, ",")
 				if jsonFields == "" {
 					fields = nil
 				}
 				out, err := jsonfields.FilterFields(output{
-					Host:    host,
-					Project: project,
-					ID:      user.ID,
-					Name:    user.Name,
-					Email:   user.Email,
+					Host:       host,
+					Project:    project,
+					ProjectURL: projectURL,
+					ID:         user.ID,
+					Name:       user.Name,
+					Email:      user.Email,
 				}, fields)
 				if err != nil {
 					return fmt.Errorf("filter fields: %w", err)
@@ -68,11 +72,12 @@ func NewCmdWhoami(f *cmdutil.Factory) *cobra.Command {
 
 			fmt.Fprintf(f.IOStreams.Out, "Logged in to %s as %s (project: %s)\n", host, user.ID, project)
 			if user.Name != "" {
-				fmt.Fprintf(f.IOStreams.Out, "Name:  %s\n", user.Name)
+				fmt.Fprintf(f.IOStreams.Out, "Name:    %s\n", user.Name)
 			}
 			if user.Email != "" {
-				fmt.Fprintf(f.IOStreams.Out, "Email: %s\n", user.Email)
+				fmt.Fprintf(f.IOStreams.Out, "Email:   %s\n", user.Email)
 			}
+			fmt.Fprintf(f.IOStreams.Out, "Project: %s\n", projectURL)
 			return nil
 		},
 	}
