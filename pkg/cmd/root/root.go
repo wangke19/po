@@ -5,9 +5,11 @@ import (
 	apiCmd "github.com/wangke19/po/pkg/cmd/api"
 	authCmd "github.com/wangke19/po/pkg/cmd/auth"
 	casecmd "github.com/wangke19/po/pkg/cmd/case"
+	completionCmd "github.com/wangke19/po/pkg/cmd/completion"
 	configCmd "github.com/wangke19/po/pkg/cmd/config"
 	searchCmd "github.com/wangke19/po/pkg/cmd/search"
 	testrunCmd "github.com/wangke19/po/pkg/cmd/testrun"
+	versionCmd "github.com/wangke19/po/pkg/cmd/version"
 	workitemCmd "github.com/wangke19/po/pkg/cmd/workitem"
 	"github.com/wangke19/po/pkg/cmdutil"
 )
@@ -28,5 +30,7 @@ func NewCmdRoot(f *cmdutil.Factory, version string) *cobra.Command {
 	cmd.AddCommand(workitemCmd.NewCmdWorkitem(f))
 	cmd.AddCommand(searchCmd.NewCmdSearch(f))
 	cmd.AddCommand(configCmd.NewCmdConfig(f))
+	cmd.AddCommand(versionCmd.NewCmdVersion(f))
+	cmd.AddCommand(completionCmd.NewCmdCompletion(f))
 	return cmd
 }

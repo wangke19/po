@@ -1,0 +1,19 @@
+package version
+
+import (
+	"fmt"
+
+	"github.com/spf13/cobra"
+	"github.com/wangke19/po/pkg/cmdutil"
+)
+
+func NewCmdVersion(f *cmdutil.Factory) *cobra.Command {
+	return &cobra.Command{
+		Use:   "version",
+		Short: "Print the po version",
+		Args:  cobra.NoArgs,
+		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Fprintf(f.IOStreams.Out, "po version %s\n", f.AppVersion)
+		},
+	}
+}
