@@ -5,6 +5,7 @@ import (
 	apiCmd "github.com/wangke19/po/pkg/cmd/api"
 	authCmd "github.com/wangke19/po/pkg/cmd/auth"
 	casecmd "github.com/wangke19/po/pkg/cmd/case"
+	searchCmd "github.com/wangke19/po/pkg/cmd/search"
 	testrunCmd "github.com/wangke19/po/pkg/cmd/testrun"
 	workitemCmd "github.com/wangke19/po/pkg/cmd/workitem"
 	"github.com/wangke19/po/pkg/cmdutil"
@@ -24,5 +25,6 @@ func NewCmdRoot(f *cmdutil.Factory, version string) *cobra.Command {
 	cmd.AddCommand(casecmd.NewCmdCase(f))
 	cmd.AddCommand(testrunCmd.NewCmdTestrun(f))
 	cmd.AddCommand(workitemCmd.NewCmdWorkitem(f))
+	cmd.AddCommand(searchCmd.NewCmdSearch(f))
 	return cmd
 }
