@@ -10,7 +10,7 @@ import (
 )
 
 func NewCmdList(f *cmdutil.Factory) *cobra.Command {
-	var wiType, status, query, jsonFields string
+	var wiType, status, author, query, jsonFields string
 	var limit int
 
 	cmd := &cobra.Command{
@@ -28,6 +28,9 @@ func NewCmdList(f *cmdutil.Factory) *cobra.Command {
 			}
 			if cmd.Flags().Changed("status") {
 				parts = append(parts, "status:"+status)
+			}
+			if cmd.Flags().Changed("author") {
+				parts = append(parts, "author:"+author)
 			}
 			if query != "" {
 				parts = append(parts, query)
@@ -61,6 +64,7 @@ func NewCmdList(f *cmdutil.Factory) *cobra.Command {
 
 	cmd.Flags().StringVar(&wiType, "type", "", "Filter by work item type")
 	cmd.Flags().StringVar(&status, "status", "", "Filter by status")
+	cmd.Flags().StringVar(&author, "author", "", "Filter by author")
 	cmd.Flags().StringVarP(&query, "query", "q", "", "Additional Lucene query")
 	cmd.Flags().IntVar(&limit, "limit", 30, "Max results")
 	cmd.Flags().StringVar(&jsonFields, "json", "", "Output as JSON with specified fields (comma-separated)")
