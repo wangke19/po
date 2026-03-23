@@ -3,6 +3,7 @@ package root
 import (
 	"github.com/spf13/cobra"
 	apiCmd "github.com/wangke19/po/pkg/cmd/api"
+	attachmentCmd "github.com/wangke19/po/pkg/cmd/attachment"
 	authCmd "github.com/wangke19/po/pkg/cmd/auth"
 	casecmd "github.com/wangke19/po/pkg/cmd/case"
 	completionCmd "github.com/wangke19/po/pkg/cmd/completion"
@@ -38,5 +39,6 @@ func NewCmdRoot(f *cmdutil.Factory, version string) *cobra.Command {
 	cmd.AddCommand(runCmd.NewCmdRun(f))
 	cmd.AddCommand(openCmd.NewCmdOpen(f))
 	cmd.AddCommand(testcaseCmd.NewCmdTestcase(f))
+	cmd.AddCommand(attachmentCmd.NewCmdAttachment(f))
 	return cmd
 }
