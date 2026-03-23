@@ -116,18 +116,27 @@ func (c *Client) CreateWorkItem(ctx context.Context, in WorkItemInput) (*WorkIte
 }
 
 func (c *Client) UpdateWorkItem(ctx context.Context, id string, in WorkItemInput) (*WorkItem, error) {
+	attrs := map[string]any{}
+	if in.Title != "" {
+		attrs["title"] = in.Title
+	}
+	if in.Type != "" {
+		attrs["type"] = in.Type
+	}
+	if in.Status != "" {
+		attrs["status"] = in.Status
+	}
+	if in.Description != "" {
+		attrs["description"] = map[string]any{
+			"type":  "text/html",
+			"value": in.Description,
+		}
+	}
 	body := map[string]any{
 		"data": map[string]any{
-			"type": "workitems",
-			"id":   id,
-			"attributes": map[string]any{
-				"title":  in.Title,
-				"status": in.Status,
-				"description": map[string]any{
-					"type":  "text/html",
-					"value": in.Description,
-				},
-			},
+			"type":       "workitems",
+			"id":         id,
+			"attributes": attrs,
 		},
 	}
 	path := fmt.Sprintf("/projects/%s/workitems/%s", c.project, id)
