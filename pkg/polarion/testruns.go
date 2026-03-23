@@ -162,6 +162,32 @@ func (c *Client) UpdateTestRunStatus(ctx context.Context, runID, status string) 
 	return c.GetTestRun(ctx, runID)
 }
 
+func (c *Client) AddTestRecord(ctx context.Context, runID, caseID string, result TestResult) error {
+	body := map[string]any{
+		"data": []map[string]any{{
+			"type": "testrecords",
+			"attributes": map[string]any{
+				"result":  result.Result,
+				"comment": map[string]any{"type": "text/plain", "value": result.Comment},
+			},
+			"relationships": map[string]any{
+				"testCase": map[string]any{
+					"data": map[string]any{
+						"type": "testcases",
+						"id":   caseID,
+					},
+				},
+			},
+		}},
+	}
+	path := fmt.Sprintf("/projects/%s/testruns/%s/testrecords", c.project, runID)
+	_, err := c.makeRequest(ctx, "POST", path, body)
+	if err != nil {
+		return fmt.Errorf("add test record %s/%s: %w", runID, caseID, err)
+	}
+	return nil
+}
+
 func (c *Client) UpdateTestRunResult(ctx context.Context, runID, caseID string, result TestResult) error {
 	body := map[string]any{
 		"data": map[string]any{
