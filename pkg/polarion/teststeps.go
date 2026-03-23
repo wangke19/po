@@ -37,6 +37,15 @@ func (c *Client) GetTestSteps(ctx context.Context, caseID string) ([]TestStep, e
 	return steps, nil
 }
 
+func (c *Client) DeleteTestStep(ctx context.Context, caseID string, stepIndex int) ([]TestStep, error) {
+	path := fmt.Sprintf("/projects/%s/workitems/%s/teststeps/%d", c.project, caseID, stepIndex)
+	_, err := c.makeRequest(ctx, "DELETE", path, nil)
+	if err != nil {
+		return nil, fmt.Errorf("delete test step %s/%d: %w", caseID, stepIndex, err)
+	}
+	return c.GetTestSteps(ctx, caseID)
+}
+
 func (c *Client) AddTestStep(ctx context.Context, caseID string, in TestStepInput) ([]TestStep, error) {
 	body := map[string]any{
 		"data": []map[string]any{{
