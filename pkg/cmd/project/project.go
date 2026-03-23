@@ -1,0 +1,16 @@
+package project
+
+import (
+	"github.com/spf13/cobra"
+	"github.com/wangke19/po/pkg/cmdutil"
+)
+
+func NewCmdProject(f *cmdutil.Factory) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "project <command>",
+		Short: "Manage Polarion projects",
+	}
+
+	cmd.AddCommand(NewCmdList(f))
+	return cmd
+}

@@ -9,6 +9,7 @@ import (
 	commentCmd "github.com/wangke19/po/pkg/cmd/comment"
 	exportCmd "github.com/wangke19/po/pkg/cmd/exportcmd"
 	importCmd "github.com/wangke19/po/pkg/cmd/importcmd"
+	projectCmd "github.com/wangke19/po/pkg/cmd/project"
 	whoamiCmd "github.com/wangke19/po/pkg/cmd/whoami"
 	casecmd "github.com/wangke19/po/pkg/cmd/case"
 	completionCmd "github.com/wangke19/po/pkg/cmd/completion"
@@ -51,6 +52,7 @@ func NewCmdRoot(f *cmdutil.Factory, version string) *cobra.Command {
 	cmd.AddCommand(cloneCmd.NewCmdClone(f))
 	cmd.AddCommand(exportCmd.NewCmdExport(f))
 	cmd.AddCommand(importCmd.NewCmdImport(f))
+	cmd.AddCommand(projectCmd.NewCmdProject(f))
 	cmd.AddCommand(whoamiCmd.NewCmdWhoami(f))
 	return cmd
 }
