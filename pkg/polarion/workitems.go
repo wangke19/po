@@ -138,6 +138,15 @@ func (c *Client) UpdateWorkItem(ctx context.Context, id string, in WorkItemInput
 	return c.GetWorkItem(ctx, id)
 }
 
+func (c *Client) DeleteWorkItem(ctx context.Context, id string) error {
+	path := fmt.Sprintf("/projects/%s/workitems/%s", c.project, id)
+	_, err := c.makeRequest(ctx, "DELETE", path, nil)
+	if err != nil {
+		return fmt.Errorf("delete work item %s: %w", id, err)
+	}
+	return nil
+}
+
 // extractHost returns the host portion from a URL like https://host/polarion/rest/v1
 func extractHost(baseURL string) string {
 	after := strings.TrimPrefix(baseURL, "https://")
