@@ -11,6 +11,7 @@ import (
 
 func NewCmdRecords(f *cmdutil.Factory) *cobra.Command {
 	var caseFilter, resultFilter, jsonFields string
+	var notRun bool
 
 	cmd := &cobra.Command{
 		Use:   "records <run-id>",
@@ -47,6 +48,16 @@ func NewCmdRecords(f *cmdutil.Factory) *cobra.Command {
 				records = filtered
 			}
 
+			if notRun {
+				filtered := records[:0]
+				for _, r := range records {
+					if r.Result == "" {
+						filtered = append(filtered, r)
+					}
+				}
+				records = filtered
+			}
+
 			if cmd.Flags().Changed("json") {
 				fields := strings.Split(jsonFields, ",")
 				if jsonFields == "" {
@@ -69,6 +80,7 @@ func NewCmdRecords(f *cmdutil.Factory) *cobra.Command {
 
 	cmd.Flags().StringVar(&caseFilter, "case", "", "Filter by test case ID")
 	cmd.Flags().StringVar(&resultFilter, "result", "", "Filter by result: passed, failed, blocked")
+	cmd.Flags().BoolVar(&notRun, "not-run", false, "Show only records not yet executed")
 	cmd.Flags().StringVar(&jsonFields, "json", "", "Output as JSON with specified fields (comma-separated)")
 	return cmd
 }
