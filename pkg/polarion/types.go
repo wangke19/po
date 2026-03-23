@@ -79,3 +79,9 @@ type Comment struct {
 	Created string `json:"created"`
 	Body    string `json:"body"`
 }
+
+type User struct {
+	ID    string `json:"id"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
+}
