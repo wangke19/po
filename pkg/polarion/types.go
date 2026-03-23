@@ -67,3 +67,8 @@ type Attachment struct {
 	ContentType string `json:"contentType"`
 	Size        int64  `json:"size"`
 }
+
+type WorkItemLink struct {
+	TargetID string `json:"targetId"`
+	Role     string `json:"role"`
+}
