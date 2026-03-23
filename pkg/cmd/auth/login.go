@@ -20,6 +20,7 @@ type loginOptions struct {
 	hostname  string
 	project   string
 	withToken bool
+	insecure  bool
 }
 
 func NewCmdLogin(f *cmdutil.Factory) *cobra.Command {
@@ -36,6 +37,7 @@ func NewCmdLogin(f *cmdutil.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&opts.hostname, "hostname", "", "Polarion instance URL (required)")
 	cmd.Flags().StringVar(&opts.project, "project", "", "Default Polarion project ID (required)")
 	cmd.Flags().BoolVar(&opts.withToken, "with-token", false, "Read token from stdin")
+	cmd.Flags().BoolVar(&opts.insecure, "insecure", false, "Skip TLS certificate verification")
 	_ = cmd.MarkFlagRequired("hostname")
 	_ = cmd.MarkFlagRequired("project")
 
@@ -66,7 +68,7 @@ func runLogin(f *cmdutil.Factory, opts *loginOptions) error {
 		return fmt.Errorf("token cannot be empty")
 	}
 
-	if err := validateToken(hostname, opts.project, token); err != nil {
+	if err := validateToken(hostname, opts.project, token, opts.insecure); err != nil {
 		return fmt.Errorf("authentication failed: %w", err)
 	}
 
@@ -86,7 +88,7 @@ func runLogin(f *cmdutil.Factory, opts *loginOptions) error {
 	return nil
 }
 
-func validateToken(hostname, project, token string) error {
+func validateToken(hostname, project, token string, insecure bool) error {
 	url := fmt.Sprintf("https://%s/polarion/rest/v1/projects/%s", hostname, project)
 	req, err := http.NewRequestWithContext(context.Background(), "GET", url, nil)
 	if err != nil {
@@ -95,11 +97,10 @@ func validateToken(hostname, project, token string) error {
 	req.Header.Set("Authorization", "Bearer "+token)
 	req.Header.Set("Accept", "application/json")
 
-	client := &http.Client{
-		Transport: &http.Transport{
-			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-		},
-	}
+	transport := http.DefaultTransport.(*http.Transport).Clone()
+	transport.TLSClientConfig = &tls.Config{InsecureSkipVerify: insecure}
+	client := &http.Client{Transport: transport}
+
 	resp, err := client.Do(req)
 	if err != nil {
 		return err
