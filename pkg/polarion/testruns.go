@@ -104,6 +104,15 @@ func (c *Client) CreateTestRun(ctx context.Context, in TestRunInput) (*TestRun, 
 	return c.GetTestRun(ctx, resp.Data[0].ID)
 }
 
+func (c *Client) DeleteTestRun(ctx context.Context, id string) error {
+	path := fmt.Sprintf("/projects/%s/testruns/%s", c.project, id)
+	_, err := c.makeRequest(ctx, "DELETE", path, nil)
+	if err != nil {
+		return fmt.Errorf("delete test run %s: %w", id, err)
+	}
+	return nil
+}
+
 func (c *Client) GetTestRunRecords(ctx context.Context, runID string) ([]TestRecord, error) {
 	path := fmt.Sprintf("/projects/%s/testruns/%s/testrecords", c.project, runID)
 	data, err := c.makeRequest(ctx, "GET", path, nil)
