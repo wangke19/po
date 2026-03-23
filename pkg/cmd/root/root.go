@@ -7,6 +7,7 @@ import (
 	casecmd "github.com/wangke19/po/pkg/cmd/case"
 	completionCmd "github.com/wangke19/po/pkg/cmd/completion"
 	configCmd "github.com/wangke19/po/pkg/cmd/config"
+	openCmd "github.com/wangke19/po/pkg/cmd/open"
 	runCmd "github.com/wangke19/po/pkg/cmd/run"
 	searchCmd "github.com/wangke19/po/pkg/cmd/search"
 	testrunCmd "github.com/wangke19/po/pkg/cmd/testrun"
@@ -34,5 +35,6 @@ func NewCmdRoot(f *cmdutil.Factory, version string) *cobra.Command {
 	cmd.AddCommand(versionCmd.NewCmdVersion(f))
 	cmd.AddCommand(completionCmd.NewCmdCompletion(f))
 	cmd.AddCommand(runCmd.NewCmdRun(f))
+	cmd.AddCommand(openCmd.NewCmdOpen(f))
 	return cmd
 }
