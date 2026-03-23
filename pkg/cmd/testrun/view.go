@@ -5,12 +5,15 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
+	"github.com/wangke19/po/pkg/browser"
 	"github.com/wangke19/po/pkg/cmdutil"
 	"github.com/wangke19/po/pkg/jsonfields"
 )
 
 func NewCmdView(f *cmdutil.Factory) *cobra.Command {
+	var web bool
 	var jsonFields string
+
 	cmd := &cobra.Command{
 		Use:   "view <id>",
 		Short: "View a test run",
@@ -24,6 +27,11 @@ func NewCmdView(f *cmdutil.Factory) *cobra.Command {
 			if err != nil {
 				return fmt.Errorf("get test run %q: %w", args[0], err)
 			}
+
+			if web {
+				return browser.Open(run.URL)
+			}
+
 			if cmd.Flags().Changed("json") {
 				fields := strings.Split(jsonFields, ",")
 				if jsonFields == "" {
@@ -41,6 +49,8 @@ func NewCmdView(f *cmdutil.Factory) *cobra.Command {
 			return nil
 		},
 	}
+
+	cmd.Flags().BoolVarP(&web, "web", "w", false, "Open in browser")
 	cmd.Flags().StringVar(&jsonFields, "json", "", "Output JSON with specified fields")
 	return cmd
 }
