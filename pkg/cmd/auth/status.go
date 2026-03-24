@@ -15,7 +15,8 @@ import (
 type hostStatus struct {
 	Host        string `json:"host"`
 	Project     string `json:"project"`
-	TokenStatus string `json:"tokenStatus"`
+	TokenSource string `json:"tokenSource"`
+	VerifySSL   bool   `json:"verifySSL"`
 }
 
 func NewCmdStatus(f *cmdutil.Factory) *cobra.Command {
@@ -41,13 +42,18 @@ func NewCmdStatus(f *cmdutil.Factory) *cobra.Command {
 			statuses := make([]hostStatus, 0, len(hosts))
 			for _, host := range hosts {
 				proj, _ := cfg.DefaultProject(host)
-				ts := "token set"
+				tokenSource := "keyring"
 				if os.Getenv("POLARION_TOKEN") != "" {
-					ts = "env"
+					tokenSource = "env"
 				} else if _, kerr := keyring.Get("po", host); kerr != nil {
-					ts = "no token"
+					tokenSource = "none"
 				}
-				statuses = append(statuses, hostStatus{Host: host, Project: proj, TokenStatus: ts})
+				statuses = append(statuses, hostStatus{
+					Host:        host,
+					Project:     proj,
+					TokenSource: tokenSource,
+					VerifySSL:   cfg.VerifySSL(host),
+				})
 			}
 
 			if cmd.Flags().Changed("json") {
@@ -64,7 +70,8 @@ func NewCmdStatus(f *cmdutil.Factory) *cobra.Command {
 			}
 
 			for _, s := range statuses {
-				fmt.Fprintf(f.IOStreams.Out, "%s\n  Project: %s\n  Token: %s\n", s.Host, s.Project, s.TokenStatus)
+				fmt.Fprintf(f.IOStreams.Out, "%s\n  Project:    %s\n  Token:      %s\n  Verify SSL: %v\n",
+					s.Host, s.Project, s.TokenSource, s.VerifySSL)
 			}
 			return nil
 		},

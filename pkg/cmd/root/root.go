@@ -29,7 +29,13 @@ func NewCmdRoot(f *cmdutil.Factory, version string) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:           "po <command> <subcommand> [flags]",
 		Short:         "Polarion CLI",
-		Long:          "Work seamlessly with Polarion ALM from the command line.",
+		Long: `Work seamlessly with Polarion ALM from the command line.
+
+Environment variables (take precedence over config file):
+  POLARION_URL         Polarion server URL (e.g. https://polarion.example.com)
+  POLARION_PROJECT     Default project ID (e.g. MYPROJECT)
+  POLARION_TOKEN       Bearer token for authentication
+  POLARION_VERIFY_SSL  Set to "false" to skip TLS certificate verification`,
 		SilenceErrors: true,
 		SilenceUsage:  true,
 	}
