@@ -7,6 +7,7 @@ import (
 )
 
 func (c *Client) ListLinks(ctx context.Context, workItemID string) ([]WorkItemLink, error) {
+	workItemID = stripProject(workItemID)
 	path := fmt.Sprintf("/projects/%s/workitems/%s/linkedworkitems", c.project, workItemID)
 	data, err := c.makeRequest(ctx, "GET", path, nil)
 	if err != nil {
@@ -42,6 +43,8 @@ func (c *Client) ListLinks(ctx context.Context, workItemID string) ([]WorkItemLi
 }
 
 func (c *Client) AddLink(ctx context.Context, workItemID, targetID, role string) error {
+	workItemID = stripProject(workItemID)
+	targetID = stripProject(targetID)
 	body := map[string]any{
 		"data": []map[string]any{{
 			"type": "linkedworkitems",
@@ -67,6 +70,8 @@ func (c *Client) AddLink(ctx context.Context, workItemID, targetID, role string)
 }
 
 func (c *Client) RemoveLink(ctx context.Context, workItemID, targetID, role string) error {
+	workItemID = stripProject(workItemID)
+	targetID = stripProject(targetID)
 	path := fmt.Sprintf("/projects/%s/workitems/%s/linkedworkitems/%s/%s/%s",
 		c.project, workItemID, c.project, targetID, role)
 	_, err := c.makeRequest(ctx, "DELETE", path, nil)

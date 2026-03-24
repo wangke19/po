@@ -9,7 +9,7 @@ import (
 )
 
 func (c *Client) ListWorkItems(ctx context.Context, query string, limit int) ([]WorkItem, error) {
-	path := fmt.Sprintf("/projects/%s/workitems?query=%s&pageSize=%d",
+	path := fmt.Sprintf("/projects/%s/workitems?query=%s&page%%5Bsize%%5D=%d&fields%%5Bworkitems%%5D=title,type,status,author",
 		c.project, url.QueryEscape(query), limit)
 	data, err := c.makeRequest(ctx, "GET", path, nil)
 	if err != nil {
@@ -41,14 +41,14 @@ func (c *Client) ListWorkItems(ctx context.Context, query string, limit int) ([]
 			Status:      d.Attributes.Status,
 			Author:      d.Attributes.Author,
 			Description: d.Attributes.Description,
-			URL:         fmt.Sprintf("https://%s/polarion/#/project/%s/workitem?id=%s", extractHost(c.baseURL), c.project, d.ID),
+			URL:         fmt.Sprintf("https://%s/polarion/#/project/%s/workitem?id=%s", extractHost(c.baseURL), c.project, stripProject(d.ID)),
 		}
 	}
 	return items, nil
 }
 
 func (c *Client) GetWorkItem(ctx context.Context, id string) (*WorkItem, error) {
-	path := fmt.Sprintf("/projects/%s/workitems/%s", c.project, id)
+	path := fmt.Sprintf("/projects/%s/workitems/%s", c.project, stripProject(id))
 	data, err := c.makeRequest(ctx, "GET", path, nil)
 	if err != nil {
 		return nil, fmt.Errorf("get work item %s: %w", id, err)
@@ -77,7 +77,7 @@ func (c *Client) GetWorkItem(ctx context.Context, id string) (*WorkItem, error) 
 		Status:      resp.Data.Attributes.Status,
 		Author:      resp.Data.Attributes.Author,
 		Description: resp.Data.Attributes.Description,
-		URL:         fmt.Sprintf("https://%s/polarion/#/project/%s/workitem?id=%s", extractHost(c.baseURL), c.project, resp.Data.ID),
+		URL:         fmt.Sprintf("https://%s/polarion/#/project/%s/workitem?id=%s", extractHost(c.baseURL), c.project, stripProject(resp.Data.ID)),
 	}, nil
 }
 
@@ -116,6 +116,7 @@ func (c *Client) CreateWorkItem(ctx context.Context, in WorkItemInput) (*WorkIte
 }
 
 func (c *Client) UpdateWorkItem(ctx context.Context, id string, in WorkItemInput) (*WorkItem, error) {
+	id = stripProject(id)
 	attrs := map[string]any{}
 	if in.Title != "" {
 		attrs["title"] = in.Title
@@ -148,12 +149,20 @@ func (c *Client) UpdateWorkItem(ctx context.Context, id string, in WorkItemInput
 }
 
 func (c *Client) DeleteWorkItem(ctx context.Context, id string) error {
-	path := fmt.Sprintf("/projects/%s/workitems/%s", c.project, id)
+	path := fmt.Sprintf("/projects/%s/workitems/%s", c.project, stripProject(id))
 	_, err := c.makeRequest(ctx, "DELETE", path, nil)
 	if err != nil {
 		return fmt.Errorf("delete work item %s: %w", id, err)
 	}
 	return nil
+}
+
+// stripProject removes the "PROJECT/" prefix from an ID like "OSE/OCP-123" → "OCP-123".
+func stripProject(id string) string {
+	if i := strings.IndexByte(id, '/'); i >= 0 {
+		return id[i+1:]
+	}
+	return id
 }
 
 // extractHost returns the host portion from a URL like https://host/polarion/rest/v1

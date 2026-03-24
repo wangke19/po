@@ -9,6 +9,7 @@ import (
 )
 
 func (c *Client) ListAttachments(ctx context.Context, workItemID string) ([]Attachment, error) {
+	workItemID = stripProject(workItemID)
 	path := fmt.Sprintf("/projects/%s/workitems/%s/attachments", c.project, workItemID)
 	data, err := c.makeRequest(ctx, "GET", path, nil)
 	if err != nil {
@@ -44,6 +45,7 @@ func (c *Client) ListAttachments(ctx context.Context, workItemID string) ([]Atta
 }
 
 func (c *Client) UploadAttachment(ctx context.Context, workItemID, fileName string, content io.Reader) (*Attachment, error) {
+	workItemID = stripProject(workItemID)
 	path := fmt.Sprintf("/projects/%s/workitems/%s/attachments", c.project, workItemID)
 	data, err := c.makeMultipartRequest(ctx, path, "file", fileName, content)
 	if err != nil {
@@ -78,6 +80,7 @@ func (c *Client) UploadAttachment(ctx context.Context, workItemID, fileName stri
 }
 
 func (c *Client) ListTestRunAttachments(ctx context.Context, runID string) ([]Attachment, error) {
+	runID = stripProject(runID)
 	path := fmt.Sprintf("/projects/%s/testruns/%s/attachments", c.project, runID)
 	data, err := c.makeRequest(ctx, "GET", path, nil)
 	if err != nil {
@@ -113,6 +116,7 @@ func (c *Client) ListTestRunAttachments(ctx context.Context, runID string) ([]At
 }
 
 func (c *Client) UploadTestRunAttachment(ctx context.Context, runID, fileName string, content io.Reader) (*Attachment, error) {
+	runID = stripProject(runID)
 	path := fmt.Sprintf("/projects/%s/testruns/%s/attachments", c.project, runID)
 	data, err := c.makeMultipartRequest(ctx, path, "file", fileName, content)
 	if err != nil {
@@ -147,6 +151,7 @@ func (c *Client) UploadTestRunAttachment(ctx context.Context, runID, fileName st
 }
 
 func (c *Client) DownloadTestRunAttachment(ctx context.Context, runID, attachmentID string) (io.ReadCloser, error) {
+	runID = stripProject(runID)
 	path := fmt.Sprintf("/projects/%s/testruns/%s/attachments/%s/content", c.project, runID, attachmentID)
 	url := strings.TrimRight(c.baseURL, "/") + path
 
@@ -167,6 +172,7 @@ func (c *Client) DownloadTestRunAttachment(ctx context.Context, runID, attachmen
 }
 
 func (c *Client) DownloadAttachment(ctx context.Context, workItemID, attachmentID string) (io.ReadCloser, error) {
+	workItemID = stripProject(workItemID)
 	path := fmt.Sprintf("/projects/%s/workitems/%s/attachments/%s/content", c.project, workItemID, attachmentID)
 	url := strings.TrimRight(c.baseURL, "/") + path
 
