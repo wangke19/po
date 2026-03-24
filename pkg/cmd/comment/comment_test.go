@@ -34,35 +34,51 @@ func outputOf(f *cmdutil.Factory) string {
 	return f.IOStreams.Out.(*bytes.Buffer).String()
 }
 
-// listResponse matches ListComments response: author is nested under attributes.author.id
-func listResponse(items []map[string]any) map[string]any {
-	return map[string]any{"data": items}
+// listCommentItem matches the ListComments API shape:
+// body is in attributes.title, author is in relationships.author.data.id
+func listCommentItem(id, authorID, created, body string) map[string]any {
+	return map[string]any{
+		"id": id,
+		"attributes": map[string]any{
+			"title":   body,
+			"created": created,
+		},
+		"relationships": map[string]any{
+			"author": map[string]any{
+				"data": map[string]any{"id": authorID},
+			},
+		},
+	}
 }
 
-func commentItem(id, authorID, created, text string) map[string]any {
+// addCommentItem matches AddComment response: body in attributes.text, author in relationships
+func addCommentItem(id, authorID, created, text string) map[string]any {
 	return map[string]any{
 		"id": id,
 		"attributes": map[string]any{
 			"text":    text,
 			"created": created,
-			"author":  map[string]any{"id": authorID},
+		},
+		"relationships": map[string]any{
+			"author": map[string]any{
+				"data": map[string]any{"id": authorID},
+			},
 		},
 	}
 }
 
-// addResponse matches AddComment response: same structure as list but wrapped in array
 func addResponse(id, authorID, created, text string) map[string]any {
 	return map[string]any{
-		"data": []map[string]any{commentItem(id, authorID, created, text)},
+		"data": []map[string]any{addCommentItem(id, authorID, created, text)},
 	}
 }
 
 func TestListComments(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		json.NewEncoder(w).Encode(listResponse([]map[string]any{
-			commentItem("CMT-1", "alice", "2026-01-01", "First"),
-			commentItem("CMT-2", "bob", "2026-01-02", "Second"),
-		}))
+		json.NewEncoder(w).Encode(map[string]any{"data": []map[string]any{
+			listCommentItem("CMT-1", "alice", "2026-01-01", "First"),
+			listCommentItem("CMT-2", "bob", "2026-01-02", "Second"),
+		}})
 	}))
 	defer srv.Close()
 
