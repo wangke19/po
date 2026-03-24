@@ -4,11 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strconv"
+	"strings"
 )
 
 func (c *Client) GetTestSteps(ctx context.Context, caseID string) ([]TestStep, error) {
 	caseID = stripProject(caseID)
-	path := fmt.Sprintf("/projects/%s/workitems/%s/teststeps", c.project, caseID)
+	path := fmt.Sprintf("/projects/%s/workitems/%s/teststeps?fields%%5Bteststeps%%5D=keys,values,index", c.project, caseID)
 	data, err := c.makeRequest(ctx, "GET", path, nil)
 	if err != nil {
 		return nil, fmt.Errorf("get test steps %s: %w", caseID, err)
@@ -16,10 +18,12 @@ func (c *Client) GetTestSteps(ctx context.Context, caseID string) ([]TestStep, e
 
 	var resp struct {
 		Data []struct {
+			ID         string `json:"id"`
 			Attributes struct {
-				StepIndex      int    `json:"stepIndex"`
-				Action         string `json:"action"`
-				ExpectedResult string `json:"expectedResult"`
+				Keys   []string `json:"keys"`
+				Values []struct {
+					Value string `json:"value"`
+				} `json:"values"`
 			} `json:"attributes"`
 		} `json:"data"`
 	}
@@ -29,10 +33,28 @@ func (c *Client) GetTestSteps(ctx context.Context, caseID string) ([]TestStep, e
 
 	steps := make([]TestStep, len(resp.Data))
 	for i, d := range resp.Data {
+		// extract step index from ID like "OSE/OCP-123/1"
+		idx := 0
+		if parts := strings.Split(d.ID, "/"); len(parts) > 0 {
+			idx, _ = strconv.Atoi(parts[len(parts)-1])
+		}
+		// map keys to values: keys=["step","expectedResult"], values=[{value:...},{value:...}]
+		var action, expectedResult string
+		for j, k := range d.Attributes.Keys {
+			if j >= len(d.Attributes.Values) {
+				break
+			}
+			switch k {
+			case "step":
+				action = d.Attributes.Values[j].Value
+			case "expectedResult":
+				expectedResult = d.Attributes.Values[j].Value
+			}
+		}
 		steps[i] = TestStep{
-			StepIndex:      d.Attributes.StepIndex,
-			Action:         d.Attributes.Action,
-			ExpectedResult: d.Attributes.ExpectedResult,
+			StepIndex:      idx,
+			Action:         action,
+			ExpectedResult: expectedResult,
 		}
 	}
 	return steps, nil
