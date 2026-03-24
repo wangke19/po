@@ -105,9 +105,17 @@ func TestCreateWorkItem_withStatus(t *testing.T) {
 		} else {
 			json.NewEncoder(w).Encode(map[string]any{
 				"data": map[string]any{
-					"id":         "WI-10",
-					"attributes": map[string]any{"title": "My item", "type": "testcase", "status": "draft"},
-					"links":      map[string]any{"self": "http://example.com/WI-10"},
+					"id": "WI-10",
+					"attributes": map[string]any{
+						"title":       "My item",
+						"type":        "testcase",
+						"status":      "draft",
+						"description": map[string]any{"value": ""},
+					},
+					"relationships": map[string]any{
+						"author": map[string]any{"data": map[string]any{"id": ""}},
+					},
+					"links": map[string]any{"self": "http://example.com/WI-10"},
 				},
 			})
 		}
@@ -136,8 +144,12 @@ func TestViewWorkItem_text(t *testing.T) {
 					"title":       "View me",
 					"type":        "testcase",
 					"status":      "approved",
-					"author":      "jdoe",
-					"description": "A description",
+					"description": map[string]any{"value": "A description"},
+				},
+				"relationships": map[string]any{
+					"author": map[string]any{
+						"data": map[string]any{"id": "jdoe"},
+					},
 				},
 				"links": map[string]any{"self": "http://example.com/WI-5"},
 			},

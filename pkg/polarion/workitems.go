@@ -9,7 +9,7 @@ import (
 )
 
 func (c *Client) ListWorkItems(ctx context.Context, query string, limit int) ([]WorkItem, error) {
-	path := fmt.Sprintf("/projects/%s/workitems?query=%s&page%%5Bsize%%5D=%d&fields%%5Bworkitems%%5D=title,type,status,author",
+	path := fmt.Sprintf("/projects/%s/workitems?query=%s&page%%5Bsize%%5D=%d&fields%%5Bworkitems%%5D=title,type,status",
 		c.project, url.QueryEscape(query), limit)
 	data, err := c.makeRequest(ctx, "GET", path, nil)
 	if err != nil {
@@ -20,12 +20,17 @@ func (c *Client) ListWorkItems(ctx context.Context, query string, limit int) ([]
 		Data []struct {
 			ID         string `json:"id"`
 			Attributes struct {
-				Title       string `json:"title"`
-				Type        string `json:"type"`
-				Status      string `json:"status"`
-				Author      string `json:"author"`
-				Description string `json:"description"`
+				Title  string `json:"title"`
+				Type   string `json:"type"`
+				Status string `json:"status"`
 			} `json:"attributes"`
+			Relationships struct {
+				Author struct {
+					Data struct {
+						ID string `json:"id"`
+					} `json:"data"`
+				} `json:"author"`
+			} `json:"relationships"`
 		} `json:"data"`
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
@@ -35,20 +40,20 @@ func (c *Client) ListWorkItems(ctx context.Context, query string, limit int) ([]
 	items := make([]WorkItem, len(resp.Data))
 	for i, d := range resp.Data {
 		items[i] = WorkItem{
-			ID:          d.ID,
-			Title:       d.Attributes.Title,
-			Type:        d.Attributes.Type,
-			Status:      d.Attributes.Status,
-			Author:      d.Attributes.Author,
-			Description: d.Attributes.Description,
-			URL:         fmt.Sprintf("https://%s/polarion/#/project/%s/workitem?id=%s", extractHost(c.baseURL), c.project, stripProject(d.ID)),
+			ID:     d.ID,
+			Title:  d.Attributes.Title,
+			Type:   d.Attributes.Type,
+			Status: d.Attributes.Status,
+			Author: d.Relationships.Author.Data.ID,
+			URL:    fmt.Sprintf("https://%s/polarion/#/project/%s/workitem?id=%s", extractHost(c.baseURL), c.project, stripProject(d.ID)),
 		}
 	}
 	return items, nil
 }
 
 func (c *Client) GetWorkItem(ctx context.Context, id string) (*WorkItem, error) {
-	path := fmt.Sprintf("/projects/%s/workitems/%s", c.project, stripProject(id))
+	path := fmt.Sprintf("/projects/%s/workitems/%s?fields%%5Bworkitems%%5D=title,type,status,description,author",
+		c.project, stripProject(id))
 	data, err := c.makeRequest(ctx, "GET", path, nil)
 	if err != nil {
 		return nil, fmt.Errorf("get work item %s: %w", id, err)
@@ -61,9 +66,17 @@ func (c *Client) GetWorkItem(ctx context.Context, id string) (*WorkItem, error) 
 				Title       string `json:"title"`
 				Type        string `json:"type"`
 				Status      string `json:"status"`
-				Author      string `json:"author"`
-				Description string `json:"description"`
+				Description struct {
+					Value string `json:"value"`
+				} `json:"description"`
 			} `json:"attributes"`
+			Relationships struct {
+				Author struct {
+					Data struct {
+						ID string `json:"id"`
+					} `json:"data"`
+				} `json:"author"`
+			} `json:"relationships"`
 		} `json:"data"`
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
@@ -75,8 +88,8 @@ func (c *Client) GetWorkItem(ctx context.Context, id string) (*WorkItem, error) 
 		Title:       resp.Data.Attributes.Title,
 		Type:        resp.Data.Attributes.Type,
 		Status:      resp.Data.Attributes.Status,
-		Author:      resp.Data.Attributes.Author,
-		Description: resp.Data.Attributes.Description,
+		Author:      resp.Data.Relationships.Author.Data.ID,
+		Description: resp.Data.Attributes.Description.Value,
 		URL:         fmt.Sprintf("https://%s/polarion/#/project/%s/workitem?id=%s", extractHost(c.baseURL), c.project, stripProject(resp.Data.ID)),
 	}, nil
 }
