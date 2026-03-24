@@ -7,6 +7,7 @@ import (
 )
 
 func (c *Client) GetTestSteps(ctx context.Context, caseID string) ([]TestStep, error) {
+	caseID = stripProject(caseID)
 	path := fmt.Sprintf("/projects/%s/workitems/%s/teststeps", c.project, caseID)
 	data, err := c.makeRequest(ctx, "GET", path, nil)
 	if err != nil {
@@ -38,6 +39,7 @@ func (c *Client) GetTestSteps(ctx context.Context, caseID string) ([]TestStep, e
 }
 
 func (c *Client) DeleteTestStep(ctx context.Context, caseID string, stepIndex int) ([]TestStep, error) {
+	caseID = stripProject(caseID)
 	path := fmt.Sprintf("/projects/%s/workitems/%s/teststeps/%d", c.project, caseID, stepIndex)
 	_, err := c.makeRequest(ctx, "DELETE", path, nil)
 	if err != nil {
@@ -47,6 +49,7 @@ func (c *Client) DeleteTestStep(ctx context.Context, caseID string, stepIndex in
 }
 
 func (c *Client) UpdateTestStep(ctx context.Context, caseID string, stepIndex int, in TestStepInput) ([]TestStep, error) {
+	caseID = stripProject(caseID)
 	attrs := map[string]any{}
 	if in.Action != "" {
 		attrs["action"] = in.Action
@@ -69,6 +72,7 @@ func (c *Client) UpdateTestStep(ctx context.Context, caseID string, stepIndex in
 }
 
 func (c *Client) AddTestStep(ctx context.Context, caseID string, in TestStepInput) ([]TestStep, error) {
+	caseID = stripProject(caseID)
 	body := map[string]any{
 		"data": []map[string]any{{
 			"type": "teststeps",

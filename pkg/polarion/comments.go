@@ -7,6 +7,7 @@ import (
 )
 
 func (c *Client) ListComments(ctx context.Context, workItemID string) ([]Comment, error) {
+	workItemID = stripProject(workItemID)
 	path := fmt.Sprintf("/projects/%s/workitems/%s/comments", c.project, workItemID)
 	data, err := c.makeRequest(ctx, "GET", path, nil)
 	if err != nil {
@@ -42,6 +43,7 @@ func (c *Client) ListComments(ctx context.Context, workItemID string) ([]Comment
 }
 
 func (c *Client) AddComment(ctx context.Context, workItemID, body string) (*Comment, error) {
+	workItemID = stripProject(workItemID)
 	reqBody := map[string]any{
 		"data": []map[string]any{{
 			"type": "comments",
