@@ -5,10 +5,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
+	"strings"
 )
 
 func (c *Client) ListTestRuns(ctx context.Context, query string, limit int) ([]TestRun, error) {
-	path := fmt.Sprintf("/projects/%s/testruns?pageSize=%d", c.project, limit)
+	path := fmt.Sprintf("/projects/%s/testruns?page%%5Bsize%%5D=%d&fields%%5Btestruns%%5D=title,status,templateId", c.project, limit)
 	if query != "" {
 		path += "&query=" + url.QueryEscape(query)
 	}
@@ -38,14 +39,14 @@ func (c *Client) ListTestRuns(ctx context.Context, query string, limit int) ([]T
 			Title:    d.Attributes.Title,
 			Status:   d.Attributes.Status,
 			Template: d.Attributes.Template,
-			URL:      fmt.Sprintf("https://%s/polarion/#/project/%s/testrun?id=%s", extractHost(c.baseURL), c.project, d.ID),
+			URL:      fmt.Sprintf("https://%s/polarion/#/project/%s/testrun?id=%s", extractHost(c.baseURL), c.project, stripProject(d.ID)),
 		}
 	}
 	return runs, nil
 }
 
 func (c *Client) GetTestRun(ctx context.Context, id string) (*TestRun, error) {
-	path := fmt.Sprintf("/projects/%s/testruns/%s", c.project, id)
+	path := fmt.Sprintf("/projects/%s/testruns/%s", c.project, stripProject(id))
 	data, err := c.makeRequest(ctx, "GET", path, nil)
 	if err != nil {
 		return nil, fmt.Errorf("get test run %s: %w", id, err)
@@ -70,7 +71,7 @@ func (c *Client) GetTestRun(ctx context.Context, id string) (*TestRun, error) {
 		Title:    resp.Data.Attributes.Title,
 		Status:   resp.Data.Attributes.Status,
 		Template: resp.Data.Attributes.Template,
-		URL:      fmt.Sprintf("https://%s/polarion/#/project/%s/testrun?id=%s", extractHost(c.baseURL), c.project, resp.Data.ID),
+		URL:      fmt.Sprintf("https://%s/polarion/#/project/%s/testrun?id=%s", extractHost(c.baseURL), c.project, stripProject(resp.Data.ID)),
 	}, nil
 }
 
@@ -105,6 +106,7 @@ func (c *Client) CreateTestRun(ctx context.Context, in TestRunInput) (*TestRun, 
 }
 
 func (c *Client) UpdateTestRun(ctx context.Context, id string, in TestRunInput) (*TestRun, error) {
+	id = stripProject(id)
 	attrs := map[string]any{}
 	if in.Title != "" {
 		attrs["title"] = in.Title
@@ -128,7 +130,7 @@ func (c *Client) UpdateTestRun(ctx context.Context, id string, in TestRunInput) 
 }
 
 func (c *Client) DeleteTestRun(ctx context.Context, id string) error {
-	path := fmt.Sprintf("/projects/%s/testruns/%s", c.project, id)
+	path := fmt.Sprintf("/projects/%s/testruns/%s", c.project, stripProject(id))
 	_, err := c.makeRequest(ctx, "DELETE", path, nil)
 	if err != nil {
 		return fmt.Errorf("delete test run %s: %w", id, err)
@@ -137,7 +139,8 @@ func (c *Client) DeleteTestRun(ctx context.Context, id string) error {
 }
 
 func (c *Client) GetTestRunRecords(ctx context.Context, runID string) ([]TestRecord, error) {
-	path := fmt.Sprintf("/projects/%s/testruns/%s/testrecords", c.project, runID)
+	runID = stripProject(runID)
+	path := fmt.Sprintf("/projects/%s/testruns/%s/testrecords?fields%%5Btestrecords%%5D=result,comment", c.project, runID)
 	data, err := c.makeRequest(ctx, "GET", path, nil)
 	if err != nil {
 		return nil, fmt.Errorf("get test run records %s: %w", runID, err)
@@ -167,8 +170,16 @@ func (c *Client) GetTestRunRecords(ctx context.Context, runID string) ([]TestRec
 
 	records := make([]TestRecord, len(resp.Data))
 	for i, d := range resp.Data {
+		caseID := d.Relationships.TestCase.Data.ID
+		if caseID == "" {
+			// fallback: parse from record ID "PROJECT/RUN/PROJECT/CASE/ITER"
+			parts := strings.Split(d.ID, "/")
+			if len(parts) >= 4 {
+				caseID = parts[2] + "/" + parts[3]
+			}
+		}
 		records[i] = TestRecord{
-			CaseID:  d.Relationships.TestCase.Data.ID,
+			CaseID:  caseID,
 			Result:  d.Attributes.Result,
 			Comment: d.Attributes.Comment.Value,
 		}
@@ -177,6 +188,7 @@ func (c *Client) GetTestRunRecords(ctx context.Context, runID string) ([]TestRec
 }
 
 func (c *Client) UpdateTestRunStatus(ctx context.Context, runID, status string) (*TestRun, error) {
+	runID = stripProject(runID)
 	body := map[string]any{
 		"data": map[string]any{
 			"type": "testruns",
@@ -195,6 +207,8 @@ func (c *Client) UpdateTestRunStatus(ctx context.Context, runID, status string) 
 }
 
 func (c *Client) AddTestRecord(ctx context.Context, runID, caseID string, result TestResult) error {
+	runID = stripProject(runID)
+	caseID = stripProject(caseID)
 	body := map[string]any{
 		"data": []map[string]any{{
 			"type": "testrecords",
@@ -221,6 +235,8 @@ func (c *Client) AddTestRecord(ctx context.Context, runID, caseID string, result
 }
 
 func (c *Client) UpdateTestRunResult(ctx context.Context, runID, caseID string, result TestResult) error {
+	runID = stripProject(runID)
+	caseID = stripProject(caseID)
 	body := map[string]any{
 		"data": map[string]any{
 			"type": "testrecords",
