@@ -8,7 +8,7 @@ import (
 
 func (c *Client) ListComments(ctx context.Context, workItemID string) ([]Comment, error) {
 	workItemID = stripProject(workItemID)
-	path := fmt.Sprintf("/projects/%s/workitems/%s/comments", c.project, workItemID)
+	path := fmt.Sprintf("/projects/%s/workitems/%s/comments?fields%%5Bworkitem_comments%%5D=title,author,created", c.project, workItemID)
 	data, err := c.makeRequest(ctx, "GET", path, nil)
 	if err != nil {
 		return nil, fmt.Errorf("list comments %s: %w", workItemID, err)
@@ -18,12 +18,16 @@ func (c *Client) ListComments(ctx context.Context, workItemID string) ([]Comment
 		Data []struct {
 			ID         string `json:"id"`
 			Attributes struct {
-				Text    string `json:"text"`
+				Title   string `json:"title"`
 				Created string `json:"created"`
-				Author  struct {
-					ID string `json:"id"`
-				} `json:"author"`
 			} `json:"attributes"`
+			Relationships struct {
+				Author struct {
+					Data struct {
+						ID string `json:"id"`
+					} `json:"data"`
+				} `json:"author"`
+			} `json:"relationships"`
 		} `json:"data"`
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
@@ -34,9 +38,9 @@ func (c *Client) ListComments(ctx context.Context, workItemID string) ([]Comment
 	for i, d := range resp.Data {
 		comments[i] = Comment{
 			ID:      d.ID,
-			Author:  d.Attributes.Author.ID,
+			Author:  d.Relationships.Author.Data.ID,
 			Created: d.Attributes.Created,
-			Body:    d.Attributes.Text,
+			Body:    d.Attributes.Title,
 		}
 	}
 	return comments, nil

@@ -46,7 +46,7 @@ func (c *Client) ListTestRuns(ctx context.Context, query string, limit int) ([]T
 }
 
 func (c *Client) GetTestRun(ctx context.Context, id string) (*TestRun, error) {
-	path := fmt.Sprintf("/projects/%s/testruns/%s", c.project, stripProject(id))
+	path := fmt.Sprintf("/projects/%s/testruns/%s?fields%%5Btestruns%%5D=title,status,templateId", c.project, stripProject(id))
 	data, err := c.makeRequest(ctx, "GET", path, nil)
 	if err != nil {
 		return nil, fmt.Errorf("get test run %s: %w", id, err)
