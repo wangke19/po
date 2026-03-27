@@ -1,3 +1,4 @@
+// Package importcmd provides import commands for workitems and test results.
 package importcmd
 
 import (

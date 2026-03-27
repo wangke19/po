@@ -1,3 +1,4 @@
+// Package open provides the open command to open Polarion resources in a browser.
 package open
 
 import (

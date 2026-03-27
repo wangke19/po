@@ -30,7 +30,7 @@ func NewCmdLogin(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "login",
 		Short: "Authenticate with a Polarion instance",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(_ *cobra.Command, _ []string) error {
 			return runLogin(f, opts)
 		},
 	}

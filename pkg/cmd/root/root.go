@@ -26,7 +26,7 @@ import (
 )
 
 // NewCmdRoot returns the root command for the po CLI.
-func NewCmdRoot(f *cmdutil.Factory, version string) *cobra.Command {
+func NewCmdRoot(f *cmdutil.Factory, _ string) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "po <command> <subcommand> [flags]",
 		Short: "Polarion CLI",

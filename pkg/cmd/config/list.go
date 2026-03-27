@@ -13,7 +13,7 @@ func NewCmdList(f *cmdutil.Factory) *cobra.Command {
 		Use:   "list",
 		Short: "List configured Polarion hosts",
 		Args:  cobra.NoArgs,
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(_ *cobra.Command, _ []string) error {
 			cfg, err := f.Config()
 			if err != nil {
 				return err

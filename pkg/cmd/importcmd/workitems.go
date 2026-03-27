@@ -17,7 +17,7 @@ func NewCmdWorkitems(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "workitems",
 		Short: "Import work items from CSV or JSON",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			client, err := f.PolarionClient()
 			if err != nil {
 				return err

@@ -9,6 +9,7 @@ import (
 	"github.com/wangke19/po/pkg/jsonfields"
 )
 
+// NewCmdList returns the 'workitem list' command.
 func NewCmdList(f *cmdutil.Factory) *cobra.Command {
 	var wiType, status, author, query, jsonFields string
 	var limit int
@@ -16,7 +17,7 @@ func NewCmdList(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List work items",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			client, err := f.PolarionClient()
 			if err != nil {
 				return err

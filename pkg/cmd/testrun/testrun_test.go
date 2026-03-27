@@ -47,7 +47,7 @@ func recordItem(caseID, result, comment string) map[string]any {
 }
 
 func makeRecordsHandler(records []map[string]any) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, _ *http.Request) {
 		_ = json.NewEncoder(w).Encode(map[string]any{"data": records})
 	}
 }

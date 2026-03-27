@@ -136,7 +136,7 @@ func TestCreateWorkItem_withStatus(t *testing.T) {
 }
 
 func TestViewWorkItem_text(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		_ = json.NewEncoder(w).Encode(map[string]any{
 			"data": map[string]any{
 				"id": "WI-5",
@@ -173,7 +173,7 @@ func TestViewWorkItem_text(t *testing.T) {
 }
 
 func TestDeleteWorkItem_requiresConfirm(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusNoContent)
 	}))
 	defer srv.Close()
