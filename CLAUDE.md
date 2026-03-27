@@ -38,3 +38,31 @@ IDs accept both `OCP-84783` and `OSE/OCP-84783`.
 - `pkg/cmdutil/` — Factory/dependency injection
 - `internal/config/` — Config file + env var handling
 - `pkg/jsonfields/` — `--json` flag field filtering
+
+## Pre-push validation
+
+**IMPORTANT:** Before pushing any code changes, always run these checks locally:
+
+```bash
+# 1. Build
+make build
+
+# 2. Run tests
+make test
+
+# 3. Run linter (requires golangci-lint installed)
+golangci-lint run
+# Or via make if available:
+make lint
+
+# 4. Run go vet
+go vet ./...
+```
+
+**Installing golangci-lint** (if not already installed):
+```bash
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | \
+  sh -s -- -b $(go env GOPATH)/bin v2.11.4
+```
+
+This ensures all CI checks will pass and prevents unnecessary fix-and-push cycles. Only push after all local checks pass.
