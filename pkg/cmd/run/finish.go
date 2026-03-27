@@ -1,3 +1,4 @@
+// Package run provides commands for managing test run execution.
 package run
 
 import (

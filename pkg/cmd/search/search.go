@@ -1,3 +1,4 @@
+// Package search provides the search command for querying Polarion workitems.
 package search
 
 import (

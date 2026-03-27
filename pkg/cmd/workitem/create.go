@@ -1,3 +1,4 @@
+// Package workitem provides commands for managing Polarion work items.
 package workitem
 
 import (
