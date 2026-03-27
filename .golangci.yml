@@ -1,4 +1,4 @@
-version: 2
+version: "2"
 
 run:
   timeout: 5m
@@ -16,20 +16,3 @@ linters:
     - misspell
     - revive
     - stylecheck
-
-linters-settings:
-  errcheck:
-    check-blank: true
-  govet:
-    enable-all: true
-  revive:
-    rules:
-      - name: var-naming
-        disabled: true
-
-issues:
-  exclude-rules:
-    - path: _test\.go
-      linters:
-        - errcheck
-        - revive
