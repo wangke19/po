@@ -8,6 +8,7 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
+// NewCmdOpen returns the 'open' command.
 func NewCmdOpen(f *cmdutil.Factory) *cobra.Command {
 	var resourceType string
 
@@ -24,7 +25,7 @@ Resource type is inferred from the ID prefix when --type is not specified:
 Use --type to override.`,
 		Args:      cobra.ExactArgs(1),
 		ValidArgs: []string{"workitem", "testrun", "case"},
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(_ *cobra.Command, args []string) error {
 			cfg, err := f.Config()
 			if err != nil {
 				return err

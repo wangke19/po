@@ -10,6 +10,7 @@ import (
 	"github.com/wangke19/po/pkg/polarion"
 )
 
+// NewCmdAddRecord returns the 'testrun add-record' command.
 func NewCmdAddRecord(f *cmdutil.Factory) *cobra.Command {
 	var caseID, result, comment, jsonFields string
 

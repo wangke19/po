@@ -10,12 +10,13 @@ import (
 	"github.com/wangke19/po/pkg/polarion"
 )
 
+// NewCmdCreate returns the 'testrun create' command.
 func NewCmdCreate(f *cmdutil.Factory) *cobra.Command {
 	var title, template, jsonFields string
 	cmd := &cobra.Command{
 		Use:   "create",
 		Short: "Create a new test run",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(_ *cobra.Command, _ []string) error {
 			client, err := f.PolarionClient()
 			if err != nil {
 				return err

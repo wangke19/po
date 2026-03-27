@@ -9,6 +9,7 @@ import (
 	"github.com/wangke19/po/pkg/jsonfields"
 )
 
+// NewCmdFinish returns the 'run finish' command.
 func NewCmdFinish(f *cmdutil.Factory) *cobra.Command {
 	var jsonFields string
 

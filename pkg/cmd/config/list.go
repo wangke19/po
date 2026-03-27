@@ -7,6 +7,7 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
+// NewCmdList returns the 'config list' command.
 func NewCmdList(f *cmdutil.Factory) *cobra.Command {
 	return &cobra.Command{
 		Use:   "list",
@@ -20,7 +21,7 @@ func NewCmdList(f *cmdutil.Factory) *cobra.Command {
 
 			hosts := cfg.Hosts()
 			if len(hosts) == 0 {
-				fmt.Fprintln(f.IOStreams.Out, "No hosts configured. Run: po auth login")
+				_, _ = fmt.Fprintln(f.IOStreams.Out, "No hosts configured. Run: po auth login")
 				return nil
 			}
 

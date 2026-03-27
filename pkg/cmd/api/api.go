@@ -24,14 +24,14 @@ type apiOptions struct {
 	inputFile string
 }
 
-func NewCmdApi(f *cmdutil.Factory) *cobra.Command {
+func NewCmdAPI(f *cmdutil.Factory) *cobra.Command {
 	opts := &apiOptions{}
 
 	cmd := &cobra.Command{
 		Use:   "api <endpoint>",
 		Short: "Make an authenticated Polarion API request",
 		Args:  cobra.ExactArgs(1),
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(_ *cobra.Command, args []string) error {
 			opts.endpoint = args[0]
 			return runApi(f, opts)
 		},
@@ -46,7 +46,7 @@ func NewCmdApi(f *cmdutil.Factory) *cobra.Command {
 	return cmd
 }
 
-func runApi(f *cmdutil.Factory, opts *apiOptions) error {
+func runAPI(f *cmdutil.Factory, opts *apiOptions) error {
 	cfg, err := f.Config()
 	if err != nil {
 		return err

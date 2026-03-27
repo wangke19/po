@@ -11,6 +11,7 @@ import (
 	"github.com/wangke19/po/pkg/jsonfields"
 )
 
+// NewCmdUpload returns the 'attachment upload' command.
 func NewCmdUpload(f *cmdutil.Factory) *cobra.Command {
 	var jsonFields string
 

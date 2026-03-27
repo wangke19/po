@@ -5,6 +5,7 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
+// NewCmdConfig returns the 'config' command.
 func NewCmdConfig(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "config <command>",

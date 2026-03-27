@@ -10,6 +10,7 @@ import (
 	"github.com/wangke19/po/pkg/polarion"
 )
 
+// NewCmdUpdate returns the 'testrun update' command.
 func NewCmdUpdate(f *cmdutil.Factory) *cobra.Command {
 	var title, template, jsonFields string
 

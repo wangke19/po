@@ -10,13 +10,14 @@ import (
 	"github.com/wangke19/po/pkg/polarion"
 )
 
+// NewCmdCreate returns the 'workitem create' command.
 func NewCmdCreate(f *cmdutil.Factory) *cobra.Command {
 	var wiType, title, desc, status, jsonFields string
 
 	cmd := &cobra.Command{
 		Use:   "create",
 		Short: "Create a work item",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(_ *cobra.Command, _ []string) error {
 			client, err := f.PolarionClient()
 			if err != nil {
 				return err

@@ -7,6 +7,7 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
+// NewCmdDelete returns the 'testrun delete' command.
 func NewCmdDelete(f *cmdutil.Factory) *cobra.Command {
 	var confirm bool
 

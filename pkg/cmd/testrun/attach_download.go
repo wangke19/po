@@ -9,6 +9,7 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
+// NewCmdAttachDownload returns the 'testrun attach-download' command.
 func NewCmdAttachDownload(f *cmdutil.Factory) *cobra.Command {
 	var output string
 

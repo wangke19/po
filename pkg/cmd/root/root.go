@@ -41,7 +41,7 @@ Environment variables (take precedence over config file):
 	}
 
 	cmd.AddCommand(authCmd.NewCmdAuth(f))
-	cmd.AddCommand(apiCmd.NewCmdApi(f))
+	cmd.AddCommand(apiCmd.NewCmdAPI(f))
 	cmd.AddCommand(casecmd.NewCmdCase(f))
 	cmd.AddCommand(testrunCmd.NewCmdTestrun(f))
 	cmd.AddCommand(workitemCmd.NewCmdWorkitem(f))

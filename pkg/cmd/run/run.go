@@ -5,6 +5,7 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
+// NewCmdRun returns the 'run' command.
 func NewCmdRun(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "run <command>",

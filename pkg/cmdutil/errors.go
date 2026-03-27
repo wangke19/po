@@ -1,3 +1,4 @@
+// Package cmdutil provides common utilities for CLI commands.
 package cmdutil
 
 import "fmt"

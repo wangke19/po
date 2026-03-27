@@ -193,6 +193,7 @@ func (c *Client) GetTestRunRecords(ctx context.Context, runID string) ([]TestRec
 	return records, nil
 }
 
+// UpdateTestRunStatus changes the status of a test run.
 func (c *Client) UpdateTestRunStatus(ctx context.Context, runID, status string) (*TestRun, error) {
 	runID = stripProject(runID)
 	body := map[string]any{
@@ -212,6 +213,7 @@ func (c *Client) UpdateTestRunStatus(ctx context.Context, runID, status string) 
 	return c.GetTestRun(ctx, runID)
 }
 
+// AddTestRecord adds a test case to a test run.
 func (c *Client) AddTestRecord(ctx context.Context, runID, caseID string, result TestResult) error {
 	runID = stripProject(runID)
 	caseID = stripProject(caseID)
@@ -240,6 +242,7 @@ func (c *Client) AddTestRecord(ctx context.Context, runID, caseID string, result
 	return nil
 }
 
+// UpdateTestRunResult updates the result for a test case in a test run.
 func (c *Client) UpdateTestRunResult(ctx context.Context, runID, caseID string, result TestResult) error {
 	runID = stripProject(runID)
 	caseID = stripProject(caseID)

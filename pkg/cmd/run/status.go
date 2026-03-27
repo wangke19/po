@@ -10,6 +10,7 @@ import (
 	"github.com/wangke19/po/pkg/polarion"
 )
 
+// NewCmdStatus returns the 'run status' command.
 func NewCmdStatus(f *cmdutil.Factory) *cobra.Command {
 	var jsonFields string
 

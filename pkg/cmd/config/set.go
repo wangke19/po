@@ -9,6 +9,7 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
+// NewCmdSet returns the 'config set' command.
 func NewCmdSet(f *cmdutil.Factory) *cobra.Command {
 	return &cobra.Command{
 		Use:   "set <host> <key> <value>",
@@ -19,7 +20,7 @@ Keys:
   project     Default project ID
   verify-ssl  TLS verification: true or false`,
 		Args: cobra.ExactArgs(3),
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(_ *cobra.Command, args []string) error {
 			hostname := config.NormalizeHostname(args[0])
 			key := args[1]
 			value := args[2]

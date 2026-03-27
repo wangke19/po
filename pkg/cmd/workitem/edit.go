@@ -10,6 +10,7 @@ import (
 	"github.com/wangke19/po/pkg/polarion"
 )
 
+// NewCmdEdit returns the 'workitem edit' command.
 func NewCmdEdit(f *cmdutil.Factory) *cobra.Command {
 	var title, wiType, desc, jsonFields string
 

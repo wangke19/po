@@ -9,6 +9,7 @@ import (
 	"github.com/wangke19/po/pkg/jsonfields"
 )
 
+// NewCmdSearch returns the 'search' command.
 func NewCmdSearch(f *cmdutil.Factory) *cobra.Command {
 	var wiType, status, author, jsonFields string
 	var limit int

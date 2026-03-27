@@ -10,6 +10,7 @@ import (
 	"github.com/wangke19/po/pkg/polarion"
 )
 
+// NewCmdResult returns the 'testrun result' command.
 func NewCmdResult(f *cmdutil.Factory) *cobra.Command {
 	var result, comment, jsonFields string
 	cmd := &cobra.Command{

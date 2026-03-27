@@ -5,6 +5,7 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
+// NewCmdWorkitem returns the 'workitem' command.
 func NewCmdWorkitem(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "workitem <command>",

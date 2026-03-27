@@ -9,6 +9,7 @@ import (
 	"github.com/wangke19/po/pkg/jsonfields"
 )
 
+// NewCmdRecords returns the 'testrun records' command.
 func NewCmdRecords(f *cmdutil.Factory) *cobra.Command {
 	var caseFilter, resultFilter, jsonFields string
 	var notRun bool

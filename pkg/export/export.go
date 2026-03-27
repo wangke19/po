@@ -1,3 +1,4 @@
+// Package export provides functions for exporting Polarion data to various formats.
 package export
 
 import (

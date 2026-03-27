@@ -9,6 +9,7 @@ import (
 	"github.com/wangke19/po/pkg/jsonfields"
 )
 
+// NewCmdAttachList returns the 'testrun attach-list' command.
 func NewCmdAttachList(f *cmdutil.Factory) *cobra.Command {
 	var jsonFields string
 

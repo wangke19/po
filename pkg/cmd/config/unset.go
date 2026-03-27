@@ -8,6 +8,7 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
+// NewCmdUnset returns the 'config unset' command.
 func NewCmdUnset(f *cmdutil.Factory) *cobra.Command {
 	return &cobra.Command{
 		Use:   "unset <host>",

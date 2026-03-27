@@ -10,6 +10,7 @@ import (
 	"github.com/wangke19/po/pkg/jsonfields"
 )
 
+// NewCmdView returns the 'workitem view' command.
 func NewCmdView(f *cmdutil.Factory) *cobra.Command {
 	var web bool
 	var jsonFields string

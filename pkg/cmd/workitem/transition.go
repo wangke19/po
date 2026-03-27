@@ -10,6 +10,7 @@ import (
 	"github.com/wangke19/po/pkg/polarion"
 )
 
+// NewCmdTransition returns the 'workitem transition' command.
 func NewCmdTransition(f *cmdutil.Factory) *cobra.Command {
 	var to, jsonFields string
 

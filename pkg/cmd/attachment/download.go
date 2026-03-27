@@ -9,6 +9,7 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
+// NewCmdDownload returns the 'attachment download' command.
 func NewCmdDownload(f *cmdutil.Factory) *cobra.Command {
 	var output string
 

@@ -7,6 +7,7 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
+// NewCmdVersion returns the 'version' command.
 func NewCmdVersion(f *cmdutil.Factory) *cobra.Command {
 	return &cobra.Command{
 		Use:   "version",

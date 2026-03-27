@@ -9,6 +9,7 @@ import (
 	"github.com/wangke19/po/pkg/jsonfields"
 )
 
+// NewCmdPause returns the 'run pause' command.
 func NewCmdPause(f *cmdutil.Factory) *cobra.Command {
 	var jsonFields string
 
