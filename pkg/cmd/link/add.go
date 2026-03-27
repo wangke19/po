@@ -24,7 +24,7 @@ func NewCmdAdd(f *cmdutil.Factory) *cobra.Command {
 				return fmt.Errorf("add link: %w", err)
 			}
 
-			fmt.Fprintf(f.IOStreams.Out, "Linked %s -> %s (role: %s)\n", args[0], args[1], role)
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "Linked %s -> %s (role: %s)\n", args[0], args[1], role)
 			return nil
 		},
 	}

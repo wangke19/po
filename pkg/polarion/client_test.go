@@ -22,7 +22,7 @@ func TestListWorkItems(t *testing.T) {
 		if r.Header.Get("Authorization") != "Bearer test-token" {
 			t.Error("missing auth header")
 		}
-		json.NewEncoder(w).Encode(map[string]any{
+		_ = json.NewEncoder(w).Encode(map[string]any{
 			"data": []map[string]any{
 				{"id": "WI-1", "attributes": map[string]any{"title": "Test case 1", "type": "testcase", "status": "draft"}},
 			},
@@ -58,12 +58,12 @@ func TestCreateWorkItem(t *testing.T) {
 		if callCount == 1 {
 			// POST - return created ID
 			w.WriteHeader(http.StatusCreated)
-			json.NewEncoder(w).Encode(map[string]any{
+			_ = json.NewEncoder(w).Encode(map[string]any{
 				"data": []map[string]any{{"id": "WI-2"}},
 			})
 		} else {
 			// GET - return full item
-			json.NewEncoder(w).Encode(map[string]any{
+			_ = json.NewEncoder(w).Encode(map[string]any{
 				"data": map[string]any{
 					"id":         "WI-2",
 					"attributes": map[string]any{"title": "New case", "type": "testcase", "status": "draft"},

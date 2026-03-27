@@ -8,6 +8,7 @@ import (
 	"strings"
 )
 
+// GetTestSteps returns all test steps for a test case.
 func (c *Client) GetTestSteps(ctx context.Context, caseID string) ([]TestStep, error) {
 	caseID = stripProject(caseID)
 	path := fmt.Sprintf("/projects/%s/workitems/%s/teststeps?fields%%5Bteststeps%%5D=keys,values,index", c.project, caseID)
@@ -60,6 +61,7 @@ func (c *Client) GetTestSteps(ctx context.Context, caseID string) ([]TestStep, e
 	return steps, nil
 }
 
+// DeleteTestStep removes a test step from a test case.
 func (c *Client) DeleteTestStep(ctx context.Context, caseID string, stepIndex int) ([]TestStep, error) {
 	caseID = stripProject(caseID)
 	path := fmt.Sprintf("/projects/%s/workitems/%s/teststeps/%d", c.project, caseID, stepIndex)
@@ -70,6 +72,7 @@ func (c *Client) DeleteTestStep(ctx context.Context, caseID string, stepIndex in
 	return c.GetTestSteps(ctx, caseID)
 }
 
+// UpdateTestStep modifies an existing test step.
 func (c *Client) UpdateTestStep(ctx context.Context, caseID string, stepIndex int, in TestStepInput) ([]TestStep, error) {
 	caseID = stripProject(caseID)
 	attrs := map[string]any{}
@@ -93,6 +96,7 @@ func (c *Client) UpdateTestStep(ctx context.Context, caseID string, stepIndex in
 	return c.GetTestSteps(ctx, caseID)
 }
 
+// AddTestStep appends a new test step to a test case.
 func (c *Client) AddTestStep(ctx context.Context, caseID string, in TestStepInput) ([]TestStep, error) {
 	caseID = stripProject(caseID)
 	body := map[string]any{

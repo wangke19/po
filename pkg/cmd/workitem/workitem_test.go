@@ -92,7 +92,7 @@ func TestCreateWorkItem_withStatus(t *testing.T) {
 		if callCount == 1 {
 			// Verify status is sent in request body (data is an array)
 			var body map[string]any
-			json.NewDecoder(r.Body).Decode(&body)
+			_ = json.NewDecoder(r.Body).Decode(&body)
 			data := body["data"].([]any)[0].(map[string]any)
 			attrs := data["attributes"].(map[string]any)
 			if attrs["status"] != "draft" {

@@ -17,7 +17,7 @@ func TestApiCmd_injectsAuthHeader(t *testing.T) {
 	var gotAuth string
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		gotAuth = r.Header.Get("Authorization")
-		w.Write([]byte(`{"data":"ok"}`))
+		_, _ = w.Write([]byte(`{"data":"ok"}`))
 	}))
 	defer srv.Close()
 
@@ -54,7 +54,7 @@ func TestApiCmd_projectSubstitution(t *testing.T) {
 	var gotPath string
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		gotPath = r.URL.Path
-		w.Write([]byte(`{}`))
+		_, _ = w.Write([]byte(`{}`))
 	}))
 	defer srv.Close()
 

@@ -99,7 +99,7 @@ func TestAddComment_body(t *testing.T) {
 	var gotText string
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var req map[string]any
-		json.NewDecoder(r.Body).Decode(&req)
+		_ = json.NewDecoder(r.Body).Decode(&req)
 		data := req["data"].([]any)[0].(map[string]any)
 		attrs := data["attributes"].(map[string]any)
 		gotText = attrs["text"].(string)
@@ -123,7 +123,7 @@ func TestAddComment_stdin(t *testing.T) {
 	var gotText string
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var req map[string]any
-		json.NewDecoder(r.Body).Decode(&req)
+		_ = json.NewDecoder(r.Body).Decode(&req)
 		data := req["data"].([]any)[0].(map[string]any)
 		attrs := data["attributes"].(map[string]any)
 		gotText = attrs["text"].(string)

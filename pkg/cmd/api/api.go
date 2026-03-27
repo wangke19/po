@@ -57,12 +57,11 @@ func runApi(f *cmdutil.Factory, opts *apiOptions) error {
 		return err
 	}
 
-	var project string
-	project, err = cfg.DefaultProject(host)
+	project, err := cfg.DefaultProject(host)
 	if err != nil && strings.Contains(opts.endpoint, "{project}") {
 		return fmt.Errorf("no project configured: use POLARION_PROJECT or po auth login")
 	}
-	err = nil // reset: missing project is non-fatal when {project} not in endpoint
+	// Note: missing project is non-fatal when {project} not in endpoint
 
 	token := os.Getenv("POLARION_TOKEN")
 	if token == "" {
@@ -126,7 +125,7 @@ func buildBody(opts *apiOptions) (io.Reader, error) {
 		if err != nil {
 			return nil, fmt.Errorf("open input file: %w", err)
 		}
-		defer f.Close()
+		defer func() { _ = f.Close() }()
 		data, err := io.ReadAll(f)
 		if err != nil {
 			return nil, fmt.Errorf("read input file: %w", err)
@@ -173,7 +172,7 @@ func doRequest(ctx context.Context, client *http.Client, method, url, token stri
 	if err != nil {
 		return nil, fmt.Errorf("do request: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	data, err := io.ReadAll(resp.Body)
 	if err != nil {
@@ -225,11 +224,11 @@ func printJSON(f *cmdutil.Factory, data []byte) error {
 		var v any
 		if err := json.Unmarshal(data, &v); err == nil {
 			if pretty, err := json.MarshalIndent(v, "", "  "); err == nil {
-				fmt.Fprintln(f.IOStreams.Out, string(pretty))
+				_, _ = fmt.Fprintln(f.IOStreams.Out, string(pretty))
 				return nil
 			}
 		}
 	}
-	fmt.Fprintln(f.IOStreams.Out, string(data))
+	_, _ = fmt.Fprintln(f.IOStreams.Out, string(data))
 	return nil
 }

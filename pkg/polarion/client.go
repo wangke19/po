@@ -11,6 +11,7 @@ import (
 	"strings"
 )
 
+// Client is a Polarion REST API client.
 type Client struct {
 	baseURL    string
 	token      string
@@ -18,6 +19,7 @@ type Client struct {
 	httpClient *http.Client
 }
 
+// NewClient creates a new Polarion API client.
 func NewClient(baseURL, token, project string, httpClient *http.Client) *Client {
 	if httpClient == nil {
 		httpClient = http.DefaultClient
@@ -55,7 +57,7 @@ func (c *Client) makeRequest(ctx context.Context, method, path string, body any)
 	if err != nil {
 		return nil, fmt.Errorf("do request: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	data, err := io.ReadAll(resp.Body)
 	if err != nil {
@@ -111,7 +113,7 @@ func (c *Client) makeMultipartRequest(ctx context.Context, path, fieldName, file
 	if err != nil {
 		return nil, fmt.Errorf("do request: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	data, err := io.ReadAll(resp.Body)
 	if err != nil {

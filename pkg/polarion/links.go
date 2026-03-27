@@ -6,6 +6,7 @@ import (
 	"fmt"
 )
 
+// ListLinks returns all links for a work item.
 func (c *Client) ListLinks(ctx context.Context, workItemID string) ([]WorkItemLink, error) {
 	workItemID = stripProject(workItemID)
 	path := fmt.Sprintf("/projects/%s/workitems/%s/linkedworkitems", c.project, workItemID)
@@ -42,6 +43,7 @@ func (c *Client) ListLinks(ctx context.Context, workItemID string) ([]WorkItemLi
 	return links, nil
 }
 
+// AddLink creates a link between two work items.
 func (c *Client) AddLink(ctx context.Context, workItemID, targetID, role string) error {
 	workItemID = stripProject(workItemID)
 	targetID = stripProject(targetID)
@@ -69,6 +71,7 @@ func (c *Client) AddLink(ctx context.Context, workItemID, targetID, role string)
 	return nil
 }
 
+// RemoveLink deletes a link between two work items.
 func (c *Client) RemoveLink(ctx context.Context, workItemID, targetID, role string) error {
 	workItemID = stripProject(workItemID)
 	targetID = stripProject(targetID)

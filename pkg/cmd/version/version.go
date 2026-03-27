@@ -13,7 +13,7 @@ func NewCmdVersion(f *cmdutil.Factory) *cobra.Command {
 		Short: "Print the po version",
 		Args:  cobra.NoArgs,
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Fprintf(f.IOStreams.Out, "po version %s\n", f.AppVersion)
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "po version %s\n", f.AppVersion)
 		},
 	}
 }

@@ -8,6 +8,7 @@ import (
 	"strings"
 )
 
+// ListAttachments returns all attachments for a work item.
 func (c *Client) ListAttachments(ctx context.Context, workItemID string) ([]Attachment, error) {
 	workItemID = stripProject(workItemID)
 	path := fmt.Sprintf("/projects/%s/workitems/%s/attachments", c.project, workItemID)
@@ -165,7 +166,7 @@ func (c *Client) DownloadTestRunAttachment(ctx context.Context, runID, attachmen
 		return nil, fmt.Errorf("download test run attachment %s: %w", attachmentID, err)
 	}
 	if resp.StatusCode >= 400 {
-		resp.Body.Close()
+		_ = resp.Body.Close()
 		return nil, fmt.Errorf("download test run attachment HTTP %d", resp.StatusCode)
 	}
 	return resp.Body, nil
@@ -186,7 +187,7 @@ func (c *Client) DownloadAttachment(ctx context.Context, workItemID, attachmentI
 		return nil, fmt.Errorf("download attachment %s: %w", attachmentID, err)
 	}
 	if resp.StatusCode >= 400 {
-		resp.Body.Close()
+		_ = resp.Body.Close()
 		return nil, fmt.Errorf("download attachment HTTP %d", resp.StatusCode)
 	}
 	return resp.Body, nil

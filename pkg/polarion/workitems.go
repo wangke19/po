@@ -8,6 +8,7 @@ import (
 	"strings"
 )
 
+// ListWorkItems searches for work items matching a query.
 func (c *Client) ListWorkItems(ctx context.Context, query string, limit int) ([]WorkItem, error) {
 	path := fmt.Sprintf("/projects/%s/workitems?query=%s&page%%5Bsize%%5D=%d&fields%%5Bworkitems%%5D=title,type,status",
 		c.project, url.QueryEscape(query), limit)
@@ -51,6 +52,7 @@ func (c *Client) ListWorkItems(ctx context.Context, query string, limit int) ([]
 	return items, nil
 }
 
+// GetWorkItem retrieves a single work item by ID.
 func (c *Client) GetWorkItem(ctx context.Context, id string) (*WorkItem, error) {
 	path := fmt.Sprintf("/projects/%s/workitems/%s?fields%%5Bworkitems%%5D=title,type,status,description,author",
 		c.project, stripProject(id))
@@ -94,6 +96,7 @@ func (c *Client) GetWorkItem(ctx context.Context, id string) (*WorkItem, error) 
 	}, nil
 }
 
+// CreateWorkItem creates a new work item.
 func (c *Client) CreateWorkItem(ctx context.Context, in WorkItemInput) (*WorkItem, error) {
 	body := map[string]any{
 		"data": []map[string]any{{
@@ -128,6 +131,7 @@ func (c *Client) CreateWorkItem(ctx context.Context, in WorkItemInput) (*WorkIte
 	return c.GetWorkItem(ctx, resp.Data[0].ID)
 }
 
+// UpdateWorkItem modifies an existing work item.
 func (c *Client) UpdateWorkItem(ctx context.Context, id string, in WorkItemInput) (*WorkItem, error) {
 	id = stripProject(id)
 	attrs := map[string]any{}
@@ -161,6 +165,7 @@ func (c *Client) UpdateWorkItem(ctx context.Context, id string, in WorkItemInput
 	return c.GetWorkItem(ctx, id)
 }
 
+// DeleteWorkItem permanently removes a work item.
 func (c *Client) DeleteWorkItem(ctx context.Context, id string) error {
 	path := fmt.Sprintf("/projects/%s/workitems/%s", c.project, stripProject(id))
 	_, err := c.makeRequest(ctx, "DELETE", path, nil)

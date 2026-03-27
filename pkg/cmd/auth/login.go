@@ -55,7 +55,7 @@ func runLogin(f *cmdutil.Factory, opts *loginOptions) error {
 		}
 		token = strings.TrimSpace(string(data))
 	} else {
-		fmt.Fprint(f.IOStreams.Out, "Token: ")
+		_, _ = fmt.Fprint(f.IOStreams.Out, "Token: ")
 		raw, err := term.ReadPassword(int(os.Stdin.Fd()))
 		if err != nil {
 			return fmt.Errorf("reading token: %w", err)
@@ -105,7 +105,7 @@ func validateToken(hostname, project, token string, insecure bool) error {
 	if err != nil {
 		return err
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode == 401 {
 		return fmt.Errorf("invalid token (HTTP 401)")

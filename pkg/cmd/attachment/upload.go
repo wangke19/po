@@ -26,7 +26,7 @@ func NewCmdUpload(f *cmdutil.Factory) *cobra.Command {
 			if err != nil {
 				return fmt.Errorf("open file: %w", err)
 			}
-			defer file.Close()
+			defer func() { _ = file.Close() }()
 
 			client, err := f.PolarionClient()
 			if err != nil {
