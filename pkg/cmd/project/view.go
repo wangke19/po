@@ -9,6 +9,7 @@ import (
 	"github.com/wangke19/po/pkg/jsonfields"
 )
 
+// NewCmdView returns the 'project view' command.
 func NewCmdView(f *cmdutil.Factory) *cobra.Command {
 	var jsonFields string
 

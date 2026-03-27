@@ -9,6 +9,7 @@ import (
 	"github.com/wangke19/po/pkg/jsonfields"
 )
 
+// NewCmdSteps returns the 'testcase steps' command.
 func NewCmdSteps(f *cmdutil.Factory) *cobra.Command {
 	var jsonFields string
 

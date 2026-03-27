@@ -10,6 +10,7 @@ import (
 	"github.com/wangke19/po/pkg/polarion"
 )
 
+// NewCmdWorkitems returns the 'import workitems' command.
 func NewCmdWorkitems(f *cmdutil.Factory) *cobra.Command {
 	var file, format string
 

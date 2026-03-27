@@ -23,6 +23,7 @@ type loginOptions struct {
 	insecure  bool
 }
 
+// NewCmdLogin returns the 'auth login' command.
 func NewCmdLogin(f *cmdutil.Factory) *cobra.Command {
 	opts := &loginOptions{}
 
@@ -60,7 +61,7 @@ func runLogin(f *cmdutil.Factory, opts *loginOptions) error {
 		if err != nil {
 			return fmt.Errorf("reading token: %w", err)
 		}
-		fmt.Fprintln(f.IOStreams.Out)
+		_, _ = fmt.Fprintln(f.IOStreams.Out)
 		token = strings.TrimSpace(string(raw))
 	}
 
@@ -84,7 +85,7 @@ func runLogin(f *cmdutil.Factory, opts *loginOptions) error {
 		return fmt.Errorf("saving config: %w", err)
 	}
 
-	fmt.Fprintf(f.IOStreams.Out, "Logged in to %s as project %s\n", hostname, opts.project)
+	_, _ = fmt.Fprintf(f.IOStreams.Out, "Logged in to %s as project %s\n", hostname, opts.project)
 	return nil
 }
 

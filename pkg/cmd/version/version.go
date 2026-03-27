@@ -1,3 +1,4 @@
+// Package version provides the version command.
 package version
 
 import (
@@ -13,7 +14,7 @@ func NewCmdVersion(f *cmdutil.Factory) *cobra.Command {
 		Use:   "version",
 		Short: "Print the po version",
 		Args:  cobra.NoArgs,
-		Run: func(cmd *cobra.Command, args []string) {
+		Run: func(_ *cobra.Command, _ []string) {
 			_, _ = fmt.Fprintf(f.IOStreams.Out, "po version %s\n", f.AppVersion)
 		},
 	}

@@ -10,6 +10,7 @@ import (
 	"github.com/wangke19/po/pkg/polarion"
 )
 
+// NewCmdStepAdd returns the 'testcase step add' command.
 func NewCmdStepAdd(f *cmdutil.Factory) *cobra.Command {
 	var action, expectedResult, jsonFields string
 

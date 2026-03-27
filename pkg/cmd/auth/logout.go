@@ -9,6 +9,7 @@ import (
 	"github.com/zalando/go-keyring"
 )
 
+// NewCmdLogout returns the 'auth logout' command.
 func NewCmdLogout(f *cmdutil.Factory) *cobra.Command {
 	var hostname string
 	cmd := &cobra.Command{

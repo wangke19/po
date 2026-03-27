@@ -10,6 +10,7 @@ import (
 	"github.com/wangke19/po/pkg/jsonfields"
 )
 
+// NewCmdStepRemove returns the 'testcase step remove' command.
 func NewCmdStepRemove(f *cmdutil.Factory) *cobra.Command {
 	var jsonFields string
 

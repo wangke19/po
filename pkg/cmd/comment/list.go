@@ -9,6 +9,7 @@ import (
 	"github.com/wangke19/po/pkg/jsonfields"
 )
 
+// NewCmdList returns the 'comment list' command.
 func NewCmdList(f *cmdutil.Factory) *cobra.Command {
 	var jsonFields string
 

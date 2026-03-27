@@ -1,3 +1,4 @@
+// Package whoami provides the whoami command to display the current authenticated user.
 package whoami
 
 import (
@@ -9,6 +10,7 @@ import (
 	"github.com/wangke19/po/pkg/jsonfields"
 )
 
+// NewCmdWhoami returns the 'whoami' command.
 func NewCmdWhoami(f *cmdutil.Factory) *cobra.Command {
 	var jsonFields string
 
@@ -16,7 +18,7 @@ func NewCmdWhoami(f *cmdutil.Factory) *cobra.Command {
 		Use:   "whoami",
 		Short: "Display the current authenticated user and context",
 		Args:  cobra.NoArgs,
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			cfg, err := f.Config()
 			if err != nil {
 				return err

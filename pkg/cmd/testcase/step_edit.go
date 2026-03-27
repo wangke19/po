@@ -11,6 +11,7 @@ import (
 	"github.com/wangke19/po/pkg/polarion"
 )
 
+// NewCmdStepEdit returns the 'testcase step edit' command.
 func NewCmdStepEdit(f *cmdutil.Factory) *cobra.Command {
 	var action, expectedResult, jsonFields string
 

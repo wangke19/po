@@ -29,7 +29,7 @@ func outputOf(f *cmdutil.Factory) string {
 }
 
 func TestListWorkItems_text(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		_ = json.NewEncoder(w).Encode(map[string]any{
 			"data": []map[string]any{
 				{"id": "WI-1", "attributes": map[string]any{"title": "First", "type": "testcase", "status": "draft"}},
@@ -53,7 +53,7 @@ func TestListWorkItems_text(t *testing.T) {
 }
 
 func TestListWorkItems_json(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		_ = json.NewEncoder(w).Encode(map[string]any{
 			"data": []map[string]any{
 				{"id": "WI-3", "attributes": map[string]any{"title": "JSON item", "type": "testcase", "status": "draft"}},

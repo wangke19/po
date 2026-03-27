@@ -24,6 +24,7 @@ type apiOptions struct {
 	inputFile string
 }
 
+// NewCmdAPI returns the 'api' command for making authenticated Polarion API requests.
 func NewCmdAPI(f *cmdutil.Factory) *cobra.Command {
 	opts := &apiOptions{}
 

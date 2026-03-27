@@ -10,6 +10,7 @@ import (
 	"github.com/wangke19/po/pkg/jsonfields"
 )
 
+// NewCmdAdd returns the 'comment add' command.
 func NewCmdAdd(f *cmdutil.Factory) *cobra.Command {
 	var body, jsonFields string
 

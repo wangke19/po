@@ -25,6 +25,7 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
+// NewCmdRoot returns the root command for the po CLI.
 func NewCmdRoot(f *cmdutil.Factory, version string) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "po <command> <subcommand> [flags]",

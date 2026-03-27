@@ -14,7 +14,7 @@ func NewCmdUnset(f *cmdutil.Factory) *cobra.Command {
 		Use:   "unset <host>",
 		Short: "Remove a host from configuration",
 		Args:  cobra.ExactArgs(1),
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(_ *cobra.Command, args []string) error {
 			hostname := config.NormalizeHostname(args[0])
 
 			cfg, err := f.Config()

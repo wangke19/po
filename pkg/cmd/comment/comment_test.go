@@ -74,7 +74,7 @@ func addResponse(id, authorID, created, text string) map[string]any {
 }
 
 func TestListComments(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		_ = json.NewEncoder(w).Encode(map[string]any{"data": []map[string]any{
 			listCommentItem("CMT-1", "alice", "2026-01-01", "First"),
 			listCommentItem("CMT-2", "bob", "2026-01-02", "Second"),

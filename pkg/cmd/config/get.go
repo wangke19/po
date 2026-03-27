@@ -19,7 +19,7 @@ Keys:
   project     Default project ID
   verify-ssl  TLS verification: true or false`,
 		Args: cobra.ExactArgs(2),
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(_ *cobra.Command, args []string) error {
 			hostname := config.NormalizeHostname(args[0])
 			key := args[1]
 
