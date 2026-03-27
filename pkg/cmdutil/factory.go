@@ -14,7 +14,7 @@ import (
 
 type Factory struct {
 	AppVersion     string
-	IOStreams       *iostreams.IOStreams
+	IOStreams      *iostreams.IOStreams
 	Config         func() (*config.Config, error)
 	HttpClient     func() (*http.Client, error)
 	PolarionClient func() (*polarion.Client, error)

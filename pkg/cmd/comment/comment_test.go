@@ -25,7 +25,7 @@ func newFactory(t *testing.T, srv *httptest.Server, stdin string) *cmdutil.Facto
 		In:     io.NopCloser(strings.NewReader(stdin)),
 	}
 	return &cmdutil.Factory{
-		IOStreams:       ios,
+		IOStreams:      ios,
 		PolarionClient: func() (*polarion.Client, error) { return client, nil },
 	}
 }

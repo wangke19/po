@@ -65,7 +65,7 @@ func TestCreateWorkItem(t *testing.T) {
 			// GET - return full item
 			json.NewEncoder(w).Encode(map[string]any{
 				"data": map[string]any{
-					"id": "WI-2",
+					"id":         "WI-2",
 					"attributes": map[string]any{"title": "New case", "type": "testcase", "status": "draft"},
 				},
 			})

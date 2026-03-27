@@ -19,7 +19,7 @@ func newFactory(t *testing.T, srv *httptest.Server) *cmdutil.Factory {
 	client := polarion.NewClient(srv.URL, "test-token", "TEST", http.DefaultClient)
 	var out bytes.Buffer
 	return &cmdutil.Factory{
-		IOStreams:       &iostreams.IOStreams{Out: &out, ErrOut: &out},
+		IOStreams:      &iostreams.IOStreams{Out: &out, ErrOut: &out},
 		PolarionClient: func() (*polarion.Client, error) { return client, nil },
 	}
 }

@@ -54,4 +54,3 @@ func WriteTestResultsJSON(w io.Writer, records []polarion.TestRecord) error {
 	}
 	return nil
 }
-
