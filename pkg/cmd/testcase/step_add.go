@@ -1,3 +1,4 @@
+// Package testcase provides commands for managing Polarion test cases.
 package testcase
 
 import (

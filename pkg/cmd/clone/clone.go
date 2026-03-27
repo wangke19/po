@@ -1,3 +1,4 @@
+// Package clone provides commands for cloning Polarion resources.
 package clone
 
 import (

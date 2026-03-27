@@ -15,7 +15,7 @@ func NewCmdLogout(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "logout",
 		Short: "Log out of a Polarion instance",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(_ *cobra.Command, _ []string) error {
 			cfg, err := f.Config()
 			if err != nil {
 				return err

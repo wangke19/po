@@ -1,3 +1,4 @@
+// Package project provides commands for managing Polarion projects.
 package project
 
 import (
