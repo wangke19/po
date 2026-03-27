@@ -13,7 +13,6 @@ linters:
     - unused
     - misspell
     - revive
-    - stylecheck
 
 formatters:
   enable:
