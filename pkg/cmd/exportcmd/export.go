@@ -1,3 +1,4 @@
+// Package exportcmd provides export commands for workitems and test results.
 package exportcmd
 
 import (

@@ -1,3 +1,4 @@
+// Package casecmd provides the case command (alias for testcase).
 package casecmd
 
 import (

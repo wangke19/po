@@ -1,3 +1,4 @@
+// Package testrun provides commands for managing Polarion test runs.
 package testrun
 
 import (
