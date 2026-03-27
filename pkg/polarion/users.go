@@ -6,6 +6,7 @@ import (
 	"fmt"
 )
 
+// GetCurrentUser returns the authenticated user.
 func (c *Client) GetCurrentUser(ctx context.Context) (*User, error) {
 	data, err := c.makeRequest(ctx, "GET", "/users/current", nil)
 	if err != nil {

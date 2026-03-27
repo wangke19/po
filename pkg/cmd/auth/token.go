@@ -9,13 +9,14 @@ import (
 	"github.com/zalando/go-keyring"
 )
 
+// NewCmdToken returns the 'auth token' command.
 func NewCmdToken(f *cmdutil.Factory) *cobra.Command {
 	return &cobra.Command{
 		Use:   "token",
 		Short: "Print the stored authentication token",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(_ *cobra.Command, _ []string) error {
 			if t := os.Getenv("POLARION_TOKEN"); t != "" {
-				fmt.Fprintln(f.IOStreams.Out, t)
+				_, _ = fmt.Fprintln(f.IOStreams.Out, t)
 				return nil
 			}
 			cfg, err := f.Config()
@@ -30,7 +31,7 @@ func NewCmdToken(f *cmdutil.Factory) *cobra.Command {
 			if err != nil {
 				return fmt.Errorf("no token stored for %s", host)
 			}
-			fmt.Fprintln(f.IOStreams.Out, token)
+			_, _ = fmt.Fprintln(f.IOStreams.Out, token)
 			return nil
 		},
 	}

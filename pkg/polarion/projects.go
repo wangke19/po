@@ -6,6 +6,7 @@ import (
 	"fmt"
 )
 
+// GetProject retrieves a project by ID.
 func (c *Client) GetProject(ctx context.Context, id string) (*Project, error) {
 	path := fmt.Sprintf("/projects/%s", id)
 	data, err := c.makeRequest(ctx, "GET", path, nil)
@@ -33,6 +34,7 @@ func (c *Client) GetProject(ctx context.Context, id string) (*Project, error) {
 	}, nil
 }
 
+// ListProjects returns all accessible projects.
 func (c *Client) ListProjects(ctx context.Context) ([]Project, error) {
 	data, err := c.makeRequest(ctx, "GET", "/projects", nil)
 	if err != nil {

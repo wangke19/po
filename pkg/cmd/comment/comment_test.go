@@ -25,7 +25,7 @@ func newFactory(t *testing.T, srv *httptest.Server, stdin string) *cmdutil.Facto
 		In:     io.NopCloser(strings.NewReader(stdin)),
 	}
 	return &cmdutil.Factory{
-		IOStreams:       ios,
+		IOStreams:      ios,
 		PolarionClient: func() (*polarion.Client, error) { return client, nil },
 	}
 }
@@ -74,8 +74,8 @@ func addResponse(id, authorID, created, text string) map[string]any {
 }
 
 func TestListComments(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		json.NewEncoder(w).Encode(map[string]any{"data": []map[string]any{
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		_ = json.NewEncoder(w).Encode(map[string]any{"data": []map[string]any{
 			listCommentItem("CMT-1", "alice", "2026-01-01", "First"),
 			listCommentItem("CMT-2", "bob", "2026-01-02", "Second"),
 		}})
@@ -99,11 +99,11 @@ func TestAddComment_body(t *testing.T) {
 	var gotText string
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var req map[string]any
-		json.NewDecoder(r.Body).Decode(&req)
+		_ = json.NewDecoder(r.Body).Decode(&req)
 		data := req["data"].([]any)[0].(map[string]any)
 		attrs := data["attributes"].(map[string]any)
 		gotText = attrs["text"].(string)
-		json.NewEncoder(w).Encode(addResponse("CMT-1", "jdoe", "2026-01-01", gotText))
+		_ = json.NewEncoder(w).Encode(addResponse("CMT-1", "jdoe", "2026-01-01", gotText))
 	}))
 	defer srv.Close()
 
@@ -123,11 +123,11 @@ func TestAddComment_stdin(t *testing.T) {
 	var gotText string
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var req map[string]any
-		json.NewDecoder(r.Body).Decode(&req)
+		_ = json.NewDecoder(r.Body).Decode(&req)
 		data := req["data"].([]any)[0].(map[string]any)
 		attrs := data["attributes"].(map[string]any)
 		gotText = attrs["text"].(string)
-		json.NewEncoder(w).Encode(addResponse("CMT-1", "jdoe", "2026-01-01", gotText))
+		_ = json.NewEncoder(w).Encode(addResponse("CMT-1", "jdoe", "2026-01-01", gotText))
 	}))
 	defer srv.Close()
 

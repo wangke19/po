@@ -1,3 +1,4 @@
+// Package project provides commands for managing Polarion projects.
 package project
 
 import (
@@ -9,6 +10,7 @@ import (
 	"github.com/wangke19/po/pkg/jsonfields"
 )
 
+// NewCmdList returns the 'project list' command.
 func NewCmdList(f *cmdutil.Factory) *cobra.Command {
 	var jsonFields string
 
@@ -16,7 +18,7 @@ func NewCmdList(f *cmdutil.Factory) *cobra.Command {
 		Use:   "list",
 		Short: "List all accessible Polarion projects",
 		Args:  cobra.NoArgs,
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			client, err := f.PolarionClient()
 			if err != nil {
 				return err
@@ -36,12 +38,12 @@ func NewCmdList(f *cmdutil.Factory) *cobra.Command {
 				if err != nil {
 					return fmt.Errorf("filter fields: %w", err)
 				}
-				fmt.Fprintln(f.IOStreams.Out, string(out))
+				_, _ = fmt.Fprintln(f.IOStreams.Out, string(out))
 				return nil
 			}
 
 			for _, p := range projects {
-				fmt.Fprintf(f.IOStreams.Out, "%s\t%s\n", p.ID, p.Name)
+				_, _ = fmt.Fprintf(f.IOStreams.Out, "%s\t%s\n", p.ID, p.Name)
 			}
 			return nil
 		},

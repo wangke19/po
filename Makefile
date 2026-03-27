@@ -3,16 +3,25 @@ DATE    ?= $(shell date -u +%Y-%m-%dT%H:%M:%SZ)
 LDFLAGS  = -X github.com/wangke19/po/internal/build.Version=$(VERSION) \
            -X github.com/wangke19/po/internal/build.Date=$(DATE)
 
-.PHONY: build test install clean
+.PHONY: build test install clean fmt vet lint
 
 build:
 	go build -ldflags "$(LDFLAGS)" -o bin/po ./cmd/po
 
 test:
-	go test ./...
+	go test -race -coverprofile=coverage.out -covermode=atomic ./...
 
 install:
 	go install -ldflags "$(LDFLAGS)" ./cmd/po
 
 clean:
 	rm -rf bin/
+
+fmt:
+	gofmt -s -w .
+
+vet:
+	go vet ./...
+
+lint:
+	golangci-lint run

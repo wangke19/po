@@ -9,6 +9,7 @@ import (
 	"github.com/wangke19/po/pkg/jsonfields"
 )
 
+// NewCmdRecords returns the 'testrun records' command.
 func NewCmdRecords(f *cmdutil.Factory) *cobra.Command {
 	var caseFilter, resultFilter, jsonFields string
 	var notRun bool
@@ -67,12 +68,12 @@ func NewCmdRecords(f *cmdutil.Factory) *cobra.Command {
 				if err != nil {
 					return fmt.Errorf("filter fields: %w", err)
 				}
-				fmt.Fprintln(f.IOStreams.Out, string(out))
+				_, _ = fmt.Fprintln(f.IOStreams.Out, string(out))
 				return nil
 			}
 
 			for _, r := range records {
-				fmt.Fprintf(f.IOStreams.Out, "%s\t%s\t%s\n", r.CaseID, r.Result, r.Comment)
+				_, _ = fmt.Fprintf(f.IOStreams.Out, "%s\t%s\t%s\n", r.CaseID, r.Result, r.Comment)
 			}
 			return nil
 		},

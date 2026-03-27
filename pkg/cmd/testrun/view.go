@@ -10,6 +10,7 @@ import (
 	"github.com/wangke19/po/pkg/jsonfields"
 )
 
+// NewCmdView returns the 'testrun view' command.
 func NewCmdView(f *cmdutil.Factory) *cobra.Command {
 	var web bool
 	var jsonFields string
@@ -41,10 +42,10 @@ func NewCmdView(f *cmdutil.Factory) *cobra.Command {
 				if err != nil {
 					return fmt.Errorf("filter fields: %w", err)
 				}
-				fmt.Fprintln(f.IOStreams.Out, string(out))
+				_, _ = fmt.Fprintln(f.IOStreams.Out, string(out))
 				return nil
 			}
-			fmt.Fprintf(f.IOStreams.Out, "ID:       %s\nTitle:    %s\nStatus:   %s\nTemplate: %s\nURL:      %s\n",
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "ID:       %s\nTitle:    %s\nStatus:   %s\nTemplate: %s\nURL:      %s\n",
 				run.ID, run.Title, run.Status, run.Template, run.URL)
 			return nil
 		},

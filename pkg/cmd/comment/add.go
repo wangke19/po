@@ -1,3 +1,4 @@
+// Package comment provides commands for managing Polarion comments.
 package comment
 
 import (
@@ -10,6 +11,7 @@ import (
 	"github.com/wangke19/po/pkg/jsonfields"
 )
 
+// NewCmdAdd returns the 'comment add' command.
 func NewCmdAdd(f *cmdutil.Factory) *cobra.Command {
 	var body, jsonFields string
 
@@ -45,11 +47,11 @@ func NewCmdAdd(f *cmdutil.Factory) *cobra.Command {
 				if err != nil {
 					return fmt.Errorf("filter fields: %w", err)
 				}
-				fmt.Fprintln(f.IOStreams.Out, string(out))
+				_, _ = fmt.Fprintln(f.IOStreams.Out, string(out))
 				return nil
 			}
 
-			fmt.Fprintf(f.IOStreams.Out, "%s\t%s\t%s\t%s\n", c.ID, c.Author, c.Created, c.Body)
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "%s\t%s\t%s\t%s\n", c.ID, c.Author, c.Created, c.Body)
 			return nil
 		},
 	}

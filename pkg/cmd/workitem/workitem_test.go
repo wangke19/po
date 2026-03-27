@@ -19,7 +19,7 @@ func newFactory(t *testing.T, srv *httptest.Server) *cmdutil.Factory {
 	client := polarion.NewClient(srv.URL, "test-token", "TEST", http.DefaultClient)
 	var out bytes.Buffer
 	return &cmdutil.Factory{
-		IOStreams:       &iostreams.IOStreams{Out: &out, ErrOut: &out},
+		IOStreams:      &iostreams.IOStreams{Out: &out, ErrOut: &out},
 		PolarionClient: func() (*polarion.Client, error) { return client, nil },
 	}
 }
@@ -29,8 +29,8 @@ func outputOf(f *cmdutil.Factory) string {
 }
 
 func TestListWorkItems_text(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		json.NewEncoder(w).Encode(map[string]any{
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		_ = json.NewEncoder(w).Encode(map[string]any{
 			"data": []map[string]any{
 				{"id": "WI-1", "attributes": map[string]any{"title": "First", "type": "testcase", "status": "draft"}},
 				{"id": "WI-2", "attributes": map[string]any{"title": "Second", "type": "testcase", "status": "approved"}},
@@ -53,8 +53,8 @@ func TestListWorkItems_text(t *testing.T) {
 }
 
 func TestListWorkItems_json(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		json.NewEncoder(w).Encode(map[string]any{
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		_ = json.NewEncoder(w).Encode(map[string]any{
 			"data": []map[string]any{
 				{"id": "WI-3", "attributes": map[string]any{"title": "JSON item", "type": "testcase", "status": "draft"}},
 			},
@@ -92,18 +92,18 @@ func TestCreateWorkItem_withStatus(t *testing.T) {
 		if callCount == 1 {
 			// Verify status is sent in request body (data is an array)
 			var body map[string]any
-			json.NewDecoder(r.Body).Decode(&body)
+			_ = json.NewDecoder(r.Body).Decode(&body)
 			data := body["data"].([]any)[0].(map[string]any)
 			attrs := data["attributes"].(map[string]any)
 			if attrs["status"] != "draft" {
 				t.Errorf("expected status=draft in request, got: %v", attrs["status"])
 			}
 			w.WriteHeader(http.StatusCreated)
-			json.NewEncoder(w).Encode(map[string]any{
+			_ = json.NewEncoder(w).Encode(map[string]any{
 				"data": []map[string]any{{"id": "WI-10"}},
 			})
 		} else {
-			json.NewEncoder(w).Encode(map[string]any{
+			_ = json.NewEncoder(w).Encode(map[string]any{
 				"data": map[string]any{
 					"id": "WI-10",
 					"attributes": map[string]any{
@@ -136,8 +136,8 @@ func TestCreateWorkItem_withStatus(t *testing.T) {
 }
 
 func TestViewWorkItem_text(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		json.NewEncoder(w).Encode(map[string]any{
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		_ = json.NewEncoder(w).Encode(map[string]any{
 			"data": map[string]any{
 				"id": "WI-5",
 				"attributes": map[string]any{
@@ -173,7 +173,7 @@ func TestViewWorkItem_text(t *testing.T) {
 }
 
 func TestDeleteWorkItem_requiresConfirm(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusNoContent)
 	}))
 	defer srv.Close()

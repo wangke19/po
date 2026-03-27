@@ -23,13 +23,14 @@ type loginOptions struct {
 	insecure  bool
 }
 
+// NewCmdLogin returns the 'auth login' command.
 func NewCmdLogin(f *cmdutil.Factory) *cobra.Command {
 	opts := &loginOptions{}
 
 	cmd := &cobra.Command{
 		Use:   "login",
 		Short: "Authenticate with a Polarion instance",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(_ *cobra.Command, _ []string) error {
 			return runLogin(f, opts)
 		},
 	}
@@ -55,12 +56,12 @@ func runLogin(f *cmdutil.Factory, opts *loginOptions) error {
 		}
 		token = strings.TrimSpace(string(data))
 	} else {
-		fmt.Fprint(f.IOStreams.Out, "Token: ")
+		_, _ = fmt.Fprint(f.IOStreams.Out, "Token: ")
 		raw, err := term.ReadPassword(int(os.Stdin.Fd()))
 		if err != nil {
 			return fmt.Errorf("reading token: %w", err)
 		}
-		fmt.Fprintln(f.IOStreams.Out)
+		_, _ = fmt.Fprintln(f.IOStreams.Out)
 		token = strings.TrimSpace(string(raw))
 	}
 
@@ -84,7 +85,7 @@ func runLogin(f *cmdutil.Factory, opts *loginOptions) error {
 		return fmt.Errorf("saving config: %w", err)
 	}
 
-	fmt.Fprintf(f.IOStreams.Out, "Logged in to %s as project %s\n", hostname, opts.project)
+	_, _ = fmt.Fprintf(f.IOStreams.Out, "Logged in to %s as project %s\n", hostname, opts.project)
 	return nil
 }
 
@@ -105,7 +106,7 @@ func validateToken(hostname, project, token string, insecure bool) error {
 	if err != nil {
 		return err
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode == 401 {
 		return fmt.Errorf("invalid token (HTTP 401)")

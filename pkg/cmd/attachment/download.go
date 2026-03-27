@@ -9,6 +9,7 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
+// NewCmdDownload returns the 'attachment download' command.
 func NewCmdDownload(f *cmdutil.Factory) *cobra.Command {
 	var output string
 
@@ -26,7 +27,7 @@ func NewCmdDownload(f *cmdutil.Factory) *cobra.Command {
 			if err != nil {
 				return fmt.Errorf("download: %w", err)
 			}
-			defer rc.Close()
+			defer func() { _ = rc.Close() }()
 
 			var dst io.Writer
 			if output == "" || output == "-" {
@@ -36,7 +37,7 @@ func NewCmdDownload(f *cmdutil.Factory) *cobra.Command {
 				if err != nil {
 					return fmt.Errorf("create output file: %w", err)
 				}
-				defer file.Close()
+				defer func() { _ = file.Close() }()
 				dst = file
 			}
 

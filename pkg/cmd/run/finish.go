@@ -1,3 +1,4 @@
+// Package run provides commands for managing test run execution.
 package run
 
 import (
@@ -9,6 +10,7 @@ import (
 	"github.com/wangke19/po/pkg/jsonfields"
 )
 
+// NewCmdFinish returns the 'run finish' command.
 func NewCmdFinish(f *cmdutil.Factory) *cobra.Command {
 	var jsonFields string
 
@@ -36,11 +38,11 @@ func NewCmdFinish(f *cmdutil.Factory) *cobra.Command {
 				if err != nil {
 					return fmt.Errorf("filter fields: %w", err)
 				}
-				fmt.Fprintln(f.IOStreams.Out, string(out))
+				_, _ = fmt.Fprintln(f.IOStreams.Out, string(out))
 				return nil
 			}
 
-			fmt.Fprintf(f.IOStreams.Out, "%s\t%s\t%s\n", run.ID, run.Status, run.Title)
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "%s\t%s\t%s\n", run.ID, run.Status, run.Title)
 			return nil
 		},
 	}

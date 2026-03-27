@@ -1,3 +1,4 @@
+// Package testcase provides commands for managing Polarion test cases.
 package testcase
 
 import (
@@ -10,6 +11,7 @@ import (
 	"github.com/wangke19/po/pkg/polarion"
 )
 
+// NewCmdStepAdd returns the 'testcase step add' command.
 func NewCmdStepAdd(f *cmdutil.Factory) *cobra.Command {
 	var action, expectedResult, jsonFields string
 
@@ -40,12 +42,12 @@ func NewCmdStepAdd(f *cmdutil.Factory) *cobra.Command {
 				if err != nil {
 					return fmt.Errorf("filter fields: %w", err)
 				}
-				fmt.Fprintln(f.IOStreams.Out, string(out))
+				_, _ = fmt.Fprintln(f.IOStreams.Out, string(out))
 				return nil
 			}
 
 			for _, s := range steps {
-				fmt.Fprintf(f.IOStreams.Out, "%d\t%s\t%s\n", s.StepIndex, s.Action, s.ExpectedResult)
+				_, _ = fmt.Fprintf(f.IOStreams.Out, "%d\t%s\t%s\n", s.StepIndex, s.Action, s.ExpectedResult)
 			}
 			return nil
 		},

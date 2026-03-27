@@ -1,3 +1,4 @@
+// Package export provides functions for exporting Polarion data to various formats.
 package export
 
 import (
@@ -9,6 +10,7 @@ import (
 	"github.com/wangke19/po/pkg/polarion"
 )
 
+// WriteWorkItemsCSV writes work items to CSV format.
 func WriteWorkItemsCSV(w io.Writer, items []polarion.WorkItem) error {
 	cw := csv.NewWriter(w)
 	if err := cw.Write([]string{"id", "type", "status", "author", "title", "url"}); err != nil {
@@ -23,6 +25,7 @@ func WriteWorkItemsCSV(w io.Writer, items []polarion.WorkItem) error {
 	return cw.Error()
 }
 
+// WriteWorkItemsJSON writes work items to JSON format.
 func WriteWorkItemsJSON(w io.Writer, items []polarion.WorkItem) error {
 	enc := json.NewEncoder(w)
 	enc.SetIndent("", "  ")
@@ -32,6 +35,7 @@ func WriteWorkItemsJSON(w io.Writer, items []polarion.WorkItem) error {
 	return nil
 }
 
+// WriteTestResultsCSV writes test records to CSV format.
 func WriteTestResultsCSV(w io.Writer, records []polarion.TestRecord) error {
 	cw := csv.NewWriter(w)
 	if err := cw.Write([]string{"caseId", "result", "comment"}); err != nil {
@@ -46,6 +50,7 @@ func WriteTestResultsCSV(w io.Writer, records []polarion.TestRecord) error {
 	return cw.Error()
 }
 
+// WriteTestResultsJSON writes test records to JSON format.
 func WriteTestResultsJSON(w io.Writer, records []polarion.TestRecord) error {
 	enc := json.NewEncoder(w)
 	enc.SetIndent("", "  ")
@@ -54,4 +59,3 @@ func WriteTestResultsJSON(w io.Writer, records []polarion.TestRecord) error {
 	}
 	return nil
 }
-

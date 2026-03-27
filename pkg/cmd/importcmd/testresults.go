@@ -10,6 +10,7 @@ import (
 	"github.com/wangke19/po/pkg/polarion"
 )
 
+// NewCmdTestresults returns the 'import testresults' command.
 func NewCmdTestresults(f *cmdutil.Factory) *cobra.Command {
 	var file, format string
 
@@ -42,13 +43,13 @@ func NewCmdTestresults(f *cmdutil.Factory) *cobra.Command {
 					Comment: rec.Comment,
 				})
 				if err != nil {
-					fmt.Fprintf(f.IOStreams.ErrOut, "warning: update %s: %v\n", rec.CaseID, err)
+					_, _ = fmt.Fprintf(f.IOStreams.ErrOut, "warning: update %s: %v\n", rec.CaseID, err)
 					failed++
 					continue
 				}
 				ok++
 			}
-			fmt.Fprintf(f.IOStreams.Out, "imported %d records (%d failed)\n", ok, failed)
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "imported %d records (%d failed)\n", ok, failed)
 			if failed > 0 {
 				return fmt.Errorf("%d records failed to import", failed)
 			}

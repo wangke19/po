@@ -9,6 +9,7 @@ import (
 	"github.com/wangke19/po/pkg/jsonfields"
 )
 
+// NewCmdStart returns the 'run start' command.
 func NewCmdStart(f *cmdutil.Factory) *cobra.Command {
 	var jsonFields string
 
@@ -36,11 +37,11 @@ func NewCmdStart(f *cmdutil.Factory) *cobra.Command {
 				if err != nil {
 					return fmt.Errorf("filter fields: %w", err)
 				}
-				fmt.Fprintln(f.IOStreams.Out, string(out))
+				_, _ = fmt.Fprintln(f.IOStreams.Out, string(out))
 				return nil
 			}
 
-			fmt.Fprintf(f.IOStreams.Out, "%s\t%s\t%s\n", run.ID, run.Status, run.Title)
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "%s\t%s\t%s\n", run.ID, run.Status, run.Title)
 			return nil
 		},
 	}

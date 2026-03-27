@@ -1,3 +1,4 @@
+// Package importer provides functions for importing data into Polarion.
 package importer
 
 import (

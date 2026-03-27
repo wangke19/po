@@ -8,12 +8,13 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
+// NewCmdUnset returns the 'config unset' command.
 func NewCmdUnset(f *cmdutil.Factory) *cobra.Command {
 	return &cobra.Command{
 		Use:   "unset <host>",
 		Short: "Remove a host from configuration",
 		Args:  cobra.ExactArgs(1),
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(_ *cobra.Command, args []string) error {
 			hostname := config.NormalizeHostname(args[0])
 
 			cfg, err := f.Config()
@@ -25,7 +26,7 @@ func NewCmdUnset(f *cmdutil.Factory) *cobra.Command {
 				return fmt.Errorf("unset host: %w", err)
 			}
 
-			fmt.Fprintf(f.IOStreams.Out, "Removed %s from configuration\n", hostname)
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "Removed %s from configuration\n", hostname)
 			return nil
 		},
 	}

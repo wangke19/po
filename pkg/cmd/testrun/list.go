@@ -9,6 +9,7 @@ import (
 	"github.com/wangke19/po/pkg/jsonfields"
 )
 
+// NewCmdList returns the 'testrun list' command.
 func NewCmdList(f *cmdutil.Factory) *cobra.Command {
 	var status, template, query, jsonFields string
 	var limit int
@@ -16,17 +17,17 @@ func NewCmdList(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List test runs",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(c *cobra.Command, _ []string) error {
 			client, err := f.PolarionClient()
 			if err != nil {
 				return err
 			}
 
 			var parts []string
-			if cmd.Flags().Changed("status") {
+			if c.Flags().Changed("status") {
 				parts = append(parts, "status:"+status)
 			}
-			if cmd.Flags().Changed("template") {
+			if c.Flags().Changed("template") {
 				parts = append(parts, "templateId:"+template)
 			}
 			if query != "" {
@@ -34,12 +35,12 @@ func NewCmdList(f *cmdutil.Factory) *cobra.Command {
 			}
 			q := strings.Join(parts, " AND ")
 
-			runs, err := client.ListTestRuns(cmd.Context(), q, limit)
+			runs, err := client.ListTestRuns(c.Context(), q, limit)
 			if err != nil {
 				return fmt.Errorf("list test runs: %w", err)
 			}
 
-			if cmd.Flags().Changed("json") {
+			if c.Flags().Changed("json") {
 				fields := strings.Split(jsonFields, ",")
 				if jsonFields == "" {
 					fields = nil
@@ -48,12 +49,12 @@ func NewCmdList(f *cmdutil.Factory) *cobra.Command {
 				if err != nil {
 					return fmt.Errorf("filter fields: %w", err)
 				}
-				fmt.Fprintln(f.IOStreams.Out, string(out))
+				_, _ = fmt.Fprintln(f.IOStreams.Out, string(out))
 				return nil
 			}
 
 			for _, r := range runs {
-				fmt.Fprintf(f.IOStreams.Out, "%s\t%s\t%s\n", r.ID, r.Status, r.Title)
+				_, _ = fmt.Fprintf(f.IOStreams.Out, "%s\t%s\t%s\n", r.ID, r.Status, r.Title)
 			}
 			return nil
 		},

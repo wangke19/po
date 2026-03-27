@@ -7,6 +7,7 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
+// NewCmdDelete returns the 'case delete' command.
 func NewCmdDelete(f *cmdutil.Factory) *cobra.Command {
 	var confirm bool
 
@@ -28,7 +29,7 @@ func NewCmdDelete(f *cmdutil.Factory) *cobra.Command {
 				return fmt.Errorf("delete test case %q: %w", args[0], err)
 			}
 
-			fmt.Fprintf(f.IOStreams.Out, "Deleted test case %s\n", args[0])
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "Deleted test case %s\n", args[0])
 			return nil
 		},
 	}

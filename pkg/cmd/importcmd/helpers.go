@@ -1,3 +1,4 @@
+// Package importcmd provides import commands for workitems and test results.
 package importcmd
 
 import (
@@ -14,5 +15,5 @@ func openReader(path string) (io.Reader, func(), error) {
 	if err != nil {
 		return nil, nil, fmt.Errorf("open input file: %w", err)
 	}
-	return f, func() { f.Close() }, nil
+	return f, func() { _ = f.Close() }, nil
 }

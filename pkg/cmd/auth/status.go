@@ -19,13 +19,14 @@ type hostStatus struct {
 	VerifySSL   bool   `json:"verifySSL"`
 }
 
+// NewCmdStatus returns the 'auth status' command.
 func NewCmdStatus(f *cmdutil.Factory) *cobra.Command {
 	var jsonFields string
 
 	cmd := &cobra.Command{
 		Use:   "status",
 		Short: "Show authentication status",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			cfg, err := f.Config()
 			if err != nil {
 				return err
@@ -35,7 +36,7 @@ func NewCmdStatus(f *cmdutil.Factory) *cobra.Command {
 				hosts = []string{config.NormalizeHostname(envURL)}
 			}
 			if len(hosts) == 0 {
-				fmt.Fprintln(f.IOStreams.Out, "Not logged in to any Polarion instance.")
+				_, _ = fmt.Fprintln(f.IOStreams.Out, "Not logged in to any Polarion instance.")
 				return nil
 			}
 
@@ -65,12 +66,12 @@ func NewCmdStatus(f *cmdutil.Factory) *cobra.Command {
 				if err != nil {
 					return fmt.Errorf("filter fields: %w", err)
 				}
-				fmt.Fprintln(f.IOStreams.Out, string(out))
+				_, _ = fmt.Fprintln(f.IOStreams.Out, string(out))
 				return nil
 			}
 
 			for _, s := range statuses {
-				fmt.Fprintf(f.IOStreams.Out, "%s\n  Project:    %s\n  Token:      %s\n  Verify SSL: %v\n",
+				_, _ = fmt.Fprintf(f.IOStreams.Out, "%s\n  Project:    %s\n  Token:      %s\n  Verify SSL: %v\n",
 					s.Host, s.Project, s.TokenSource, s.VerifySSL)
 			}
 			return nil

@@ -9,6 +9,7 @@ import (
 	"github.com/wangke19/po/pkg/jsonfields"
 )
 
+// NewCmdAttachList returns the 'testrun attach-list' command.
 func NewCmdAttachList(f *cmdutil.Factory) *cobra.Command {
 	var jsonFields string
 
@@ -36,12 +37,12 @@ func NewCmdAttachList(f *cmdutil.Factory) *cobra.Command {
 				if err != nil {
 					return fmt.Errorf("filter fields: %w", err)
 				}
-				fmt.Fprintln(f.IOStreams.Out, string(out))
+				_, _ = fmt.Fprintln(f.IOStreams.Out, string(out))
 				return nil
 			}
 
 			for _, a := range attachments {
-				fmt.Fprintf(f.IOStreams.Out, "%s\t%s\t%s\t%d\n", a.ID, a.FileName, a.ContentType, a.Size)
+				_, _ = fmt.Fprintf(f.IOStreams.Out, "%s\t%s\t%s\t%d\n", a.ID, a.FileName, a.ContentType, a.Size)
 			}
 			return nil
 		},

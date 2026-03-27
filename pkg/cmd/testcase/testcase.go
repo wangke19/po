@@ -5,6 +5,7 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
+// NewCmdTestcase returns the 'testcase' command group.
 func NewCmdTestcase(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "testcase <command>",

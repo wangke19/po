@@ -1,3 +1,4 @@
+// Package attachment provides commands for managing Polarion attachments.
 package attachment
 
 import (
@@ -5,6 +6,7 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
+// NewCmdAttachment returns the 'attachment' command.
 func NewCmdAttachment(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "attachment <command>",

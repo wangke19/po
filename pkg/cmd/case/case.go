@@ -1,3 +1,4 @@
+// Package casecmd provides the case command (alias for testcase).
 package casecmd
 
 import (
@@ -5,6 +6,7 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
+// NewCmdCase returns the 'case' command.
 func NewCmdCase(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "case <command>",

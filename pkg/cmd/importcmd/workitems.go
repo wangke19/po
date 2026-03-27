@@ -10,13 +10,14 @@ import (
 	"github.com/wangke19/po/pkg/polarion"
 )
 
+// NewCmdWorkitems returns the 'import workitems' command.
 func NewCmdWorkitems(f *cmdutil.Factory) *cobra.Command {
 	var file, format string
 
 	cmd := &cobra.Command{
 		Use:   "workitems",
 		Short: "Import work items from CSV or JSON",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			client, err := f.PolarionClient()
 			if err != nil {
 				return err
@@ -38,7 +39,7 @@ func NewCmdWorkitems(f *cmdutil.Factory) *cobra.Command {
 				if err != nil {
 					return fmt.Errorf("create work item %q: %w", item.Title, err)
 				}
-				fmt.Fprintf(f.IOStreams.Out, "%s\t%s\t%s\n", created.ID, created.Type, created.Title)
+				_, _ = fmt.Fprintf(f.IOStreams.Out, "%s\t%s\t%s\n", created.ID, created.Type, created.Title)
 			}
 			return nil
 		},

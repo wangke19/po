@@ -1,3 +1,4 @@
+// Package root provides the root command for the po CLI.
 package root
 
 import (
@@ -5,30 +6,31 @@ import (
 	apiCmd "github.com/wangke19/po/pkg/cmd/api"
 	attachmentCmd "github.com/wangke19/po/pkg/cmd/attachment"
 	authCmd "github.com/wangke19/po/pkg/cmd/auth"
+	casecmd "github.com/wangke19/po/pkg/cmd/case"
 	cloneCmd "github.com/wangke19/po/pkg/cmd/clone"
 	commentCmd "github.com/wangke19/po/pkg/cmd/comment"
-	exportCmd "github.com/wangke19/po/pkg/cmd/exportcmd"
-	importCmd "github.com/wangke19/po/pkg/cmd/importcmd"
-	projectCmd "github.com/wangke19/po/pkg/cmd/project"
-	whoamiCmd "github.com/wangke19/po/pkg/cmd/whoami"
-	casecmd "github.com/wangke19/po/pkg/cmd/case"
 	completionCmd "github.com/wangke19/po/pkg/cmd/completion"
 	configCmd "github.com/wangke19/po/pkg/cmd/config"
+	exportCmd "github.com/wangke19/po/pkg/cmd/exportcmd"
+	importCmd "github.com/wangke19/po/pkg/cmd/importcmd"
 	linkCmd "github.com/wangke19/po/pkg/cmd/link"
 	openCmd "github.com/wangke19/po/pkg/cmd/open"
+	projectCmd "github.com/wangke19/po/pkg/cmd/project"
 	runCmd "github.com/wangke19/po/pkg/cmd/run"
-	testcaseCmd "github.com/wangke19/po/pkg/cmd/testcase"
 	searchCmd "github.com/wangke19/po/pkg/cmd/search"
+	testcaseCmd "github.com/wangke19/po/pkg/cmd/testcase"
 	testrunCmd "github.com/wangke19/po/pkg/cmd/testrun"
 	versionCmd "github.com/wangke19/po/pkg/cmd/version"
+	whoamiCmd "github.com/wangke19/po/pkg/cmd/whoami"
 	workitemCmd "github.com/wangke19/po/pkg/cmd/workitem"
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
-func NewCmdRoot(f *cmdutil.Factory, version string) *cobra.Command {
+// NewCmdRoot returns the root command for the po CLI.
+func NewCmdRoot(f *cmdutil.Factory, _ string) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:           "po <command> <subcommand> [flags]",
-		Short:         "Polarion CLI",
+		Use:   "po <command> <subcommand> [flags]",
+		Short: "Polarion CLI",
 		Long: `Work seamlessly with Polarion ALM from the command line.
 
 Environment variables (take precedence over config file):
@@ -41,7 +43,7 @@ Environment variables (take precedence over config file):
 	}
 
 	cmd.AddCommand(authCmd.NewCmdAuth(f))
-	cmd.AddCommand(apiCmd.NewCmdApi(f))
+	cmd.AddCommand(apiCmd.NewCmdAPI(f))
 	cmd.AddCommand(casecmd.NewCmdCase(f))
 	cmd.AddCommand(testrunCmd.NewCmdTestrun(f))
 	cmd.AddCommand(workitemCmd.NewCmdWorkitem(f))

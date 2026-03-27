@@ -10,6 +10,7 @@ import (
 	"github.com/wangke19/po/pkg/polarion"
 )
 
+// NewCmdTestrun returns the 'clone testrun' command.
 func NewCmdTestrun(f *cmdutil.Factory) *cobra.Command {
 	var title, jsonFields string
 
@@ -50,11 +51,11 @@ func NewCmdTestrun(f *cmdutil.Factory) *cobra.Command {
 				if err != nil {
 					return fmt.Errorf("filter fields: %w", err)
 				}
-				fmt.Fprintln(f.IOStreams.Out, string(out))
+				_, _ = fmt.Fprintln(f.IOStreams.Out, string(out))
 				return nil
 			}
 
-			fmt.Fprintf(f.IOStreams.Out, "%s\t%s\t%s\n", created.ID, created.Status, created.Title)
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "%s\t%s\t%s\n", created.ID, created.Status, created.Title)
 			return nil
 		},
 	}

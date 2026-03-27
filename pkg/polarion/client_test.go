@@ -22,7 +22,7 @@ func TestListWorkItems(t *testing.T) {
 		if r.Header.Get("Authorization") != "Bearer test-token" {
 			t.Error("missing auth header")
 		}
-		json.NewEncoder(w).Encode(map[string]any{
+		_ = json.NewEncoder(w).Encode(map[string]any{
 			"data": []map[string]any{
 				{"id": "WI-1", "attributes": map[string]any{"title": "Test case 1", "type": "testcase", "status": "draft"}},
 			},
@@ -42,7 +42,7 @@ func TestListWorkItems(t *testing.T) {
 }
 
 func TestGetWorkItem_notFound(t *testing.T) {
-	client := newTestClient(t, func(w http.ResponseWriter, r *http.Request) {
+	client := newTestClient(t, func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(404)
 	})
 	_, err := client.GetWorkItem(context.Background(), "WI-999")
@@ -53,19 +53,19 @@ func TestGetWorkItem_notFound(t *testing.T) {
 
 func TestCreateWorkItem(t *testing.T) {
 	callCount := 0
-	client := newTestClient(t, func(w http.ResponseWriter, r *http.Request) {
+	client := newTestClient(t, func(w http.ResponseWriter, _ *http.Request) {
 		callCount++
 		if callCount == 1 {
 			// POST - return created ID
 			w.WriteHeader(http.StatusCreated)
-			json.NewEncoder(w).Encode(map[string]any{
+			_ = json.NewEncoder(w).Encode(map[string]any{
 				"data": []map[string]any{{"id": "WI-2"}},
 			})
 		} else {
 			// GET - return full item
-			json.NewEncoder(w).Encode(map[string]any{
+			_ = json.NewEncoder(w).Encode(map[string]any{
 				"data": map[string]any{
-					"id": "WI-2",
+					"id":         "WI-2",
 					"attributes": map[string]any{"title": "New case", "type": "testcase", "status": "draft"},
 				},
 			})
@@ -85,8 +85,8 @@ func TestCreateWorkItem(t *testing.T) {
 }
 
 func TestCreateWorkItem_emptyResponse(t *testing.T) {
-	client := newTestClient(t, func(w http.ResponseWriter, r *http.Request) {
-		json.NewEncoder(w).Encode(map[string]any{"data": []any{}})
+	client := newTestClient(t, func(w http.ResponseWriter, _ *http.Request) {
+		_ = json.NewEncoder(w).Encode(map[string]any{"data": []any{}})
 	})
 	_, err := client.CreateWorkItem(context.Background(), polarion.WorkItemInput{Title: "X", Type: "testcase"})
 	if err == nil {
@@ -95,8 +95,8 @@ func TestCreateWorkItem_emptyResponse(t *testing.T) {
 }
 
 func TestListTestRuns(t *testing.T) {
-	client := newTestClient(t, func(w http.ResponseWriter, r *http.Request) {
-		json.NewEncoder(w).Encode(map[string]any{
+	client := newTestClient(t, func(w http.ResponseWriter, _ *http.Request) {
+		_ = json.NewEncoder(w).Encode(map[string]any{
 			"data": []map[string]any{
 				{"id": "TR-1", "attributes": map[string]any{"title": "Sprint 1 Run", "status": "inprogress"}},
 			},

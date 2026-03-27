@@ -1,3 +1,4 @@
+// Package polarion implements a REST API client for Polarion ALM.
 package polarion
 
 import (
@@ -8,6 +9,7 @@ import (
 	"strings"
 )
 
+// ListAttachments returns all attachments for a work item.
 func (c *Client) ListAttachments(ctx context.Context, workItemID string) ([]Attachment, error) {
 	workItemID = stripProject(workItemID)
 	path := fmt.Sprintf("/projects/%s/workitems/%s/attachments", c.project, workItemID)
@@ -44,6 +46,7 @@ func (c *Client) ListAttachments(ctx context.Context, workItemID string) ([]Atta
 	return attachments, nil
 }
 
+// UploadAttachment uploads a file attachment to a work item.
 func (c *Client) UploadAttachment(ctx context.Context, workItemID, fileName string, content io.Reader) (*Attachment, error) {
 	workItemID = stripProject(workItemID)
 	path := fmt.Sprintf("/projects/%s/workitems/%s/attachments", c.project, workItemID)
@@ -79,6 +82,7 @@ func (c *Client) UploadAttachment(ctx context.Context, workItemID, fileName stri
 	}, nil
 }
 
+// ListTestRunAttachments returns all attachments for a test run.
 func (c *Client) ListTestRunAttachments(ctx context.Context, runID string) ([]Attachment, error) {
 	runID = stripProject(runID)
 	path := fmt.Sprintf("/projects/%s/testruns/%s/attachments", c.project, runID)
@@ -115,6 +119,7 @@ func (c *Client) ListTestRunAttachments(ctx context.Context, runID string) ([]At
 	return attachments, nil
 }
 
+// UploadTestRunAttachment uploads a file attachment to a test run.
 func (c *Client) UploadTestRunAttachment(ctx context.Context, runID, fileName string, content io.Reader) (*Attachment, error) {
 	runID = stripProject(runID)
 	path := fmt.Sprintf("/projects/%s/testruns/%s/attachments", c.project, runID)
@@ -150,6 +155,7 @@ func (c *Client) UploadTestRunAttachment(ctx context.Context, runID, fileName st
 	}, nil
 }
 
+// DownloadTestRunAttachment downloads a test run attachment.
 func (c *Client) DownloadTestRunAttachment(ctx context.Context, runID, attachmentID string) (io.ReadCloser, error) {
 	runID = stripProject(runID)
 	path := fmt.Sprintf("/projects/%s/testruns/%s/attachments/%s/content", c.project, runID, attachmentID)
@@ -165,12 +171,13 @@ func (c *Client) DownloadTestRunAttachment(ctx context.Context, runID, attachmen
 		return nil, fmt.Errorf("download test run attachment %s: %w", attachmentID, err)
 	}
 	if resp.StatusCode >= 400 {
-		resp.Body.Close()
+		_ = resp.Body.Close()
 		return nil, fmt.Errorf("download test run attachment HTTP %d", resp.StatusCode)
 	}
 	return resp.Body, nil
 }
 
+// DownloadAttachment downloads a work item attachment.
 func (c *Client) DownloadAttachment(ctx context.Context, workItemID, attachmentID string) (io.ReadCloser, error) {
 	workItemID = stripProject(workItemID)
 	path := fmt.Sprintf("/projects/%s/workitems/%s/attachments/%s/content", c.project, workItemID, attachmentID)
@@ -186,7 +193,7 @@ func (c *Client) DownloadAttachment(ctx context.Context, workItemID, attachmentI
 		return nil, fmt.Errorf("download attachment %s: %w", attachmentID, err)
 	}
 	if resp.StatusCode >= 400 {
-		resp.Body.Close()
+		_ = resp.Body.Close()
 		return nil, fmt.Errorf("download attachment HTTP %d", resp.StatusCode)
 	}
 	return resp.Body, nil

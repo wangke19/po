@@ -12,14 +12,16 @@ import (
 	"github.com/zalando/go-keyring"
 )
 
+// Factory provides dependencies for CLI commands.
 type Factory struct {
 	AppVersion     string
-	IOStreams       *iostreams.IOStreams
+	IOStreams      *iostreams.IOStreams
 	Config         func() (*config.Config, error)
-	HttpClient     func() (*http.Client, error)
+	HTTPClient     func() (*http.Client, error)
 	PolarionClient func() (*polarion.Client, error)
 }
 
+// New creates a new Factory instance.
 func New(version string) *Factory {
 	f := &Factory{
 		AppVersion: version,
@@ -30,7 +32,7 @@ func New(version string) *Factory {
 		return config.New(config.DefaultConfigPath()), nil
 	}
 
-	f.HttpClient = func() (*http.Client, error) {
+	f.HTTPClient = func() (*http.Client, error) {
 		cfg, err := f.Config()
 		if err != nil {
 			return nil, err
@@ -66,7 +68,7 @@ func New(version string) *Factory {
 			}
 		}
 
-		httpClient, err := f.HttpClient()
+		httpClient, err := f.HTTPClient()
 		if err != nil {
 			return nil, err
 		}

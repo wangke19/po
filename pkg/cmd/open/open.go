@@ -1,3 +1,4 @@
+// Package open provides the open command to open Polarion resources in a browser.
 package open
 
 import (
@@ -8,6 +9,7 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
+// NewCmdOpen returns the 'open' command.
 func NewCmdOpen(f *cmdutil.Factory) *cobra.Command {
 	var resourceType string
 
@@ -24,7 +26,7 @@ Resource type is inferred from the ID prefix when --type is not specified:
 Use --type to override.`,
 		Args:      cobra.ExactArgs(1),
 		ValidArgs: []string{"workitem", "testrun", "case"},
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(_ *cobra.Command, args []string) error {
 			cfg, err := f.Config()
 			if err != nil {
 				return err
@@ -43,7 +45,7 @@ Use --type to override.`,
 			id := args[0]
 			url := buildURL(host, project, id, resourceType)
 
-			fmt.Fprintf(f.IOStreams.Out, "Opening %s\n", url)
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "Opening %s\n", url)
 			if err := browser.Open(url); err != nil {
 				return fmt.Errorf("open browser: %w", err)
 			}

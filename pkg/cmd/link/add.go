@@ -1,3 +1,4 @@
+// Package link provides commands for managing Polarion workitem links.
 package link
 
 import (
@@ -7,6 +8,7 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
+// NewCmdAdd returns the 'link add' command.
 func NewCmdAdd(f *cmdutil.Factory) *cobra.Command {
 	var role string
 
@@ -24,7 +26,7 @@ func NewCmdAdd(f *cmdutil.Factory) *cobra.Command {
 				return fmt.Errorf("add link: %w", err)
 			}
 
-			fmt.Fprintf(f.IOStreams.Out, "Linked %s -> %s (role: %s)\n", args[0], args[1], role)
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "Linked %s -> %s (role: %s)\n", args[0], args[1], role)
 			return nil
 		},
 	}

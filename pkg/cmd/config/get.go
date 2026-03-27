@@ -8,6 +8,7 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
+// NewCmdGet returns the 'config get' command.
 func NewCmdGet(f *cmdutil.Factory) *cobra.Command {
 	return &cobra.Command{
 		Use:   "get <host> <key>",
@@ -18,7 +19,7 @@ Keys:
   project     Default project ID
   verify-ssl  TLS verification: true or false`,
 		Args: cobra.ExactArgs(2),
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(_ *cobra.Command, args []string) error {
 			hostname := config.NormalizeHostname(args[0])
 			key := args[1]
 
@@ -33,9 +34,9 @@ Keys:
 				if err != nil {
 					return err
 				}
-				fmt.Fprintln(f.IOStreams.Out, project)
+				_, _ = fmt.Fprintln(f.IOStreams.Out, project)
 			case "verify-ssl":
-				fmt.Fprintln(f.IOStreams.Out, cfg.VerifySSL(hostname))
+				_, _ = fmt.Fprintln(f.IOStreams.Out, cfg.VerifySSL(hostname))
 			default:
 				return fmt.Errorf("unknown key %q: valid keys are project, verify-ssl", key)
 			}

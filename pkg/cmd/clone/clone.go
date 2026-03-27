@@ -1,3 +1,4 @@
+// Package clone provides commands for cloning Polarion resources.
 package clone
 
 import (
@@ -5,6 +6,7 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
+// NewCmdClone returns the 'clone' command.
 func NewCmdClone(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "clone <command>",

@@ -11,6 +11,7 @@ import (
 	"github.com/wangke19/po/pkg/jsonfields"
 )
 
+// NewCmdUpload returns the 'attachment upload' command.
 func NewCmdUpload(f *cmdutil.Factory) *cobra.Command {
 	var jsonFields string
 
@@ -26,7 +27,7 @@ func NewCmdUpload(f *cmdutil.Factory) *cobra.Command {
 			if err != nil {
 				return fmt.Errorf("open file: %w", err)
 			}
-			defer file.Close()
+			defer func() { _ = file.Close() }()
 
 			client, err := f.PolarionClient()
 			if err != nil {
@@ -47,11 +48,11 @@ func NewCmdUpload(f *cmdutil.Factory) *cobra.Command {
 				if err != nil {
 					return fmt.Errorf("filter fields: %w", err)
 				}
-				fmt.Fprintln(f.IOStreams.Out, string(out))
+				_, _ = fmt.Fprintln(f.IOStreams.Out, string(out))
 				return nil
 			}
 
-			fmt.Fprintf(f.IOStreams.Out, "%s\t%s\t%s\t%d\n", att.ID, att.FileName, att.ContentType, att.Size)
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "%s\t%s\t%s\t%d\n", att.ID, att.FileName, att.ContentType, att.Size)
 			return nil
 		},
 	}

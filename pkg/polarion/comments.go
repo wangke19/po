@@ -6,6 +6,7 @@ import (
 	"fmt"
 )
 
+// ListComments returns all comments for a work item.
 func (c *Client) ListComments(ctx context.Context, workItemID string) ([]Comment, error) {
 	workItemID = stripProject(workItemID)
 	path := fmt.Sprintf("/projects/%s/workitems/%s/comments?fields%%5Bworkitem_comments%%5D=title,author,created", c.project, workItemID)
@@ -46,6 +47,7 @@ func (c *Client) ListComments(ctx context.Context, workItemID string) ([]Comment
 	return comments, nil
 }
 
+// AddComment adds a new comment to a work item.
 func (c *Client) AddComment(ctx context.Context, workItemID, body string) (*Comment, error) {
 	workItemID = stripProject(workItemID)
 	reqBody := map[string]any{

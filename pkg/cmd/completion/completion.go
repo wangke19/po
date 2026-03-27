@@ -1,3 +1,4 @@
+// Package completion provides shell completion generation commands.
 package completion
 
 import (
@@ -7,6 +8,7 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
+// NewCmdCompletion returns the 'completion' command.
 func NewCmdCompletion(f *cmdutil.Factory) *cobra.Command {
 	return &cobra.Command{
 		Use:   "completion <shell>",

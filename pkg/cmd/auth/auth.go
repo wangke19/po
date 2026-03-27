@@ -1,3 +1,4 @@
+// Package auth provides authentication commands for Polarion.
 package auth
 
 import (
@@ -5,6 +6,7 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
+// NewCmdAuth returns the 'auth' command group.
 func NewCmdAuth(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "auth <command>",

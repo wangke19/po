@@ -1,3 +1,4 @@
+// Package pocmd provides the command execution logic for the po CLI.
 package pocmd
 
 import (
@@ -9,20 +10,24 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
-type exitCode int
+// ExitCode represents the exit status of the command.
+type ExitCode int
 
 const (
-	exitOK    exitCode = 0
-	exitError exitCode = 1
+	// ExitOK indicates successful execution.
+	ExitOK ExitCode = 0
+	// ExitError indicates an error occurred.
+	ExitError ExitCode = 1
 )
 
-func Main() exitCode {
+// Main executes the root command and returns the exit code.
+func Main() ExitCode {
 	f := cmdutil.New(build.Version)
 	cmd := root.NewCmdRoot(f, build.Version)
 
 	if err := cmd.Execute(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
-		return exitError
+		return ExitError
 	}
-	return exitOK
+	return ExitOK
 }

@@ -1,3 +1,4 @@
+// Package exportcmd provides export commands for workitems and test results.
 package exportcmd
 
 import (
@@ -5,6 +6,7 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
+// NewCmdExport returns the 'export' command.
 func NewCmdExport(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "export <command>",

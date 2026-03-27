@@ -19,7 +19,7 @@ func newFactory(t *testing.T, srv *httptest.Server) *cmdutil.Factory {
 	client := polarion.NewClient(srv.URL, "test-token", "TEST", http.DefaultClient)
 	var out bytes.Buffer
 	return &cmdutil.Factory{
-		IOStreams:       &iostreams.IOStreams{Out: &out, ErrOut: &out},
+		IOStreams:      &iostreams.IOStreams{Out: &out, ErrOut: &out},
 		PolarionClient: func() (*polarion.Client, error) { return client, nil },
 	}
 }
@@ -47,8 +47,8 @@ func recordItem(caseID, result, comment string) map[string]any {
 }
 
 func makeRecordsHandler(records []map[string]any) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		json.NewEncoder(w).Encode(map[string]any{"data": records})
+	return func(w http.ResponseWriter, _ *http.Request) {
+		_ = json.NewEncoder(w).Encode(map[string]any{"data": records})
 	}
 }
 

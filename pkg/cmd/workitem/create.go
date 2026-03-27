@@ -1,3 +1,4 @@
+// Package workitem provides commands for managing Polarion work items.
 package workitem
 
 import (
@@ -10,19 +11,20 @@ import (
 	"github.com/wangke19/po/pkg/polarion"
 )
 
+// NewCmdCreate returns the 'workitem create' command.
 func NewCmdCreate(f *cmdutil.Factory) *cobra.Command {
 	var wiType, title, desc, status, jsonFields string
 
 	cmd := &cobra.Command{
 		Use:   "create",
 		Short: "Create a work item",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(c *cobra.Command, _ []string) error {
 			client, err := f.PolarionClient()
 			if err != nil {
 				return err
 			}
 
-			item, err := client.CreateWorkItem(cmd.Context(), polarion.WorkItemInput{
+			item, err := client.CreateWorkItem(c.Context(), polarion.WorkItemInput{
 				Type:        wiType,
 				Title:       title,
 				Status:      status,
@@ -32,7 +34,7 @@ func NewCmdCreate(f *cmdutil.Factory) *cobra.Command {
 				return fmt.Errorf("create work item: %w", err)
 			}
 
-			if cmd.Flags().Changed("json") {
+			if c.Flags().Changed("json") {
 				fields := strings.Split(jsonFields, ",")
 				if jsonFields == "" {
 					fields = nil
@@ -41,11 +43,11 @@ func NewCmdCreate(f *cmdutil.Factory) *cobra.Command {
 				if err != nil {
 					return fmt.Errorf("filter fields: %w", err)
 				}
-				fmt.Fprintln(f.IOStreams.Out, string(out))
+				_, _ = fmt.Fprintln(f.IOStreams.Out, string(out))
 				return nil
 			}
 
-			fmt.Fprintf(f.IOStreams.Out, "Created %s %s\n%s\n", wiType, item.ID, item.URL)
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "Created %s %s\n%s\n", wiType, item.ID, item.URL)
 			return nil
 		},
 	}

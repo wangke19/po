@@ -10,6 +10,7 @@ import (
 	"github.com/wangke19/po/pkg/export"
 )
 
+// NewCmdWorkitems returns the 'export workitems' command.
 func NewCmdWorkitems(f *cmdutil.Factory) *cobra.Command {
 	var wiType, query, format, output string
 	var limit int
@@ -17,7 +18,7 @@ func NewCmdWorkitems(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "workitems",
 		Short: "Export work items to CSV or JSON",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			client, err := f.PolarionClient()
 			if err != nil {
 				return err
