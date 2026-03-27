@@ -1,3 +1,4 @@
+// Package attachment provides commands for managing Polarion attachments.
 package attachment
 
 import (

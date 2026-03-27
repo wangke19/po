@@ -1,3 +1,4 @@
+// Package root provides the root command for the po CLI.
 package root
 
 import (

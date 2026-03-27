@@ -1,3 +1,4 @@
+// Package pocmd provides the command execution logic for the po CLI.
 package pocmd
 
 import (

@@ -1,3 +1,4 @@
+// Package auth provides authentication commands for Polarion.
 package auth
 
 import (
