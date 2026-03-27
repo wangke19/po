@@ -7,8 +7,6 @@ run:
 linters:
   enable:
     - errcheck
-    - gofmt
-    - goimports
     - govet
     - ineffassign
     - staticcheck
@@ -16,3 +14,8 @@ linters:
     - misspell
     - revive
     - stylecheck
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
