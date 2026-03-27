@@ -1,3 +1,4 @@
+// Package comment provides commands for managing Polarion comments.
 package comment
 
 import (

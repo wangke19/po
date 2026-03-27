@@ -1,3 +1,4 @@
+// Package link provides commands for managing Polarion workitem links.
 package link
 
 import (

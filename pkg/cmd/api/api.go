@@ -1,3 +1,4 @@
+// Package api provides the api command for making authenticated Polarion API requests.
 package api
 
 import (
