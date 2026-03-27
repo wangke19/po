@@ -48,7 +48,7 @@ func NewCmdTestresults(f *cmdutil.Factory) *cobra.Command {
 				}
 				ok++
 			}
-			fmt.Fprintf(f.IOStreams.Out, "imported %d records (%d failed)\n", ok, failed)
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "imported %d records (%d failed)\n", ok, failed)
 			if failed > 0 {
 				return fmt.Errorf("%d records failed to import", failed)
 			}

@@ -9,6 +9,7 @@ import (
 	"github.com/wangke19/po/pkg/jsonfields"
 )
 
+// NewCmdList returns the 'case list' command.
 func NewCmdList(f *cmdutil.Factory) *cobra.Command {
 	var status, author, query, jsonFields string
 	var limit int
@@ -16,7 +17,7 @@ func NewCmdList(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List test cases",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			client, err := f.PolarionClient()
 			if err != nil {
 				return err
@@ -48,12 +49,12 @@ func NewCmdList(f *cmdutil.Factory) *cobra.Command {
 				if err != nil {
 					return fmt.Errorf("filter fields: %w", err)
 				}
-				fmt.Fprintln(f.IOStreams.Out, string(out))
+				_, _ = fmt.Fprintln(f.IOStreams.Out, string(out))
 				return nil
 			}
 
 			for _, item := range items {
-				fmt.Fprintf(f.IOStreams.Out, "%s\t%s\t%s\n", item.ID, item.Status, item.Title)
+				_, _ = fmt.Fprintf(f.IOStreams.Out, "%s\t%s\t%s\n", item.ID, item.Status, item.Title)
 			}
 			return nil
 		},

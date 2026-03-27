@@ -36,11 +36,11 @@ func NewCmdView(f *cmdutil.Factory) *cobra.Command {
 				if err != nil {
 					return fmt.Errorf("filter fields: %w", err)
 				}
-				fmt.Fprintln(f.IOStreams.Out, string(out))
+				_, _ = fmt.Fprintln(f.IOStreams.Out, string(out))
 				return nil
 			}
 
-			fmt.Fprintf(f.IOStreams.Out, "ID:          %s\nName:        %s\nDescription: %s\n",
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "ID:          %s\nName:        %s\nDescription: %s\n",
 				p.ID, p.Name, p.Description)
 			return nil
 		},

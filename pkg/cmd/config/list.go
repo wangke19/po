@@ -27,7 +27,7 @@ func NewCmdList(f *cmdutil.Factory) *cobra.Command {
 			for _, h := range hosts {
 				project, _ := cfg.DefaultProject(h)
 				verifySSL := cfg.VerifySSL(h)
-				fmt.Fprintf(f.IOStreams.Out, "%s\tproject=%s\tverify-ssl=%v\n", h, project, verifySSL)
+				_, _ = fmt.Fprintf(f.IOStreams.Out, "%s\tproject=%s\tverify-ssl=%v\n", h, project, verifySSL)
 			}
 			return nil
 		},

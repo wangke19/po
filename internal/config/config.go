@@ -1,3 +1,4 @@
+// Package config manages Polarion CLI configuration and authentication.
 package config
 
 import (

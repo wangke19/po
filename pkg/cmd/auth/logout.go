@@ -30,7 +30,7 @@ func NewCmdLogout(f *cmdutil.Factory) *cobra.Command {
 			if err := cfg.RemoveHost(hostname); err != nil {
 				return err
 			}
-			fmt.Fprintf(f.IOStreams.Out, "Logged out of %s\n", hostname)
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "Logged out of %s\n", hostname)
 			return nil
 		},
 	}

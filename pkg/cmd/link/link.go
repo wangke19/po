@@ -5,6 +5,7 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
+// NewCmdLink returns the 'link' command.
 func NewCmdLink(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "link <command>",

@@ -25,7 +25,7 @@ func NewCmdUnset(f *cmdutil.Factory) *cobra.Command {
 				return fmt.Errorf("unset host: %w", err)
 			}
 
-			fmt.Fprintf(f.IOStreams.Out, "Removed %s from configuration\n", hostname)
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "Removed %s from configuration\n", hostname)
 			return nil
 		},
 	}

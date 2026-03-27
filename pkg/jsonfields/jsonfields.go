@@ -1,3 +1,4 @@
+// Package jsonfields provides utilities for filtering JSON output by field names.
 package jsonfields
 
 import (

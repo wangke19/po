@@ -30,7 +30,7 @@ func outputOf(f *cmdutil.Factory) string {
 
 func TestListWorkItems_text(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		json.NewEncoder(w).Encode(map[string]any{
+		_ = json.NewEncoder(w).Encode(map[string]any{
 			"data": []map[string]any{
 				{"id": "WI-1", "attributes": map[string]any{"title": "First", "type": "testcase", "status": "draft"}},
 				{"id": "WI-2", "attributes": map[string]any{"title": "Second", "type": "testcase", "status": "approved"}},
@@ -54,7 +54,7 @@ func TestListWorkItems_text(t *testing.T) {
 
 func TestListWorkItems_json(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		json.NewEncoder(w).Encode(map[string]any{
+		_ = json.NewEncoder(w).Encode(map[string]any{
 			"data": []map[string]any{
 				{"id": "WI-3", "attributes": map[string]any{"title": "JSON item", "type": "testcase", "status": "draft"}},
 			},
@@ -99,11 +99,11 @@ func TestCreateWorkItem_withStatus(t *testing.T) {
 				t.Errorf("expected status=draft in request, got: %v", attrs["status"])
 			}
 			w.WriteHeader(http.StatusCreated)
-			json.NewEncoder(w).Encode(map[string]any{
+			_ = json.NewEncoder(w).Encode(map[string]any{
 				"data": []map[string]any{{"id": "WI-10"}},
 			})
 		} else {
-			json.NewEncoder(w).Encode(map[string]any{
+			_ = json.NewEncoder(w).Encode(map[string]any{
 				"data": map[string]any{
 					"id": "WI-10",
 					"attributes": map[string]any{
@@ -137,7 +137,7 @@ func TestCreateWorkItem_withStatus(t *testing.T) {
 
 func TestViewWorkItem_text(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		json.NewEncoder(w).Encode(map[string]any{
+		_ = json.NewEncoder(w).Encode(map[string]any{
 			"data": map[string]any{
 				"id": "WI-5",
 				"attributes": map[string]any{

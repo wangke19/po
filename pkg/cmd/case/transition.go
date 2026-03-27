@@ -10,6 +10,7 @@ import (
 	"github.com/wangke19/po/pkg/polarion"
 )
 
+// NewCmdTransition returns the 'case transition' command.
 func NewCmdTransition(f *cmdutil.Factory) *cobra.Command {
 	var to, jsonFields string
 
@@ -42,11 +43,11 @@ func NewCmdTransition(f *cmdutil.Factory) *cobra.Command {
 				if err != nil {
 					return fmt.Errorf("filter fields: %w", err)
 				}
-				fmt.Fprintln(f.IOStreams.Out, string(out))
+				_, _ = fmt.Fprintln(f.IOStreams.Out, string(out))
 				return nil
 			}
 
-			fmt.Fprintf(f.IOStreams.Out, "%s transitioned to %s\n", args[0], item.Status)
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "%s transitioned to %s\n", args[0], item.Status)
 			return nil
 		},
 	}

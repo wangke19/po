@@ -36,12 +36,12 @@ func NewCmdList(f *cmdutil.Factory) *cobra.Command {
 				if err != nil {
 					return fmt.Errorf("filter fields: %w", err)
 				}
-				fmt.Fprintln(f.IOStreams.Out, string(out))
+				_, _ = fmt.Fprintln(f.IOStreams.Out, string(out))
 				return nil
 			}
 
 			for _, p := range projects {
-				fmt.Fprintf(f.IOStreams.Out, "%s\t%s\n", p.ID, p.Name)
+				_, _ = fmt.Fprintf(f.IOStreams.Out, "%s\t%s\n", p.ID, p.Name)
 			}
 			return nil
 		},

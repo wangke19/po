@@ -8,6 +8,7 @@ import (
 	"github.com/wangke19/po/pkg/export"
 )
 
+// NewCmdTestresults returns the 'export testresults' command.
 func NewCmdTestresults(f *cmdutil.Factory) *cobra.Command {
 	var format, output string
 

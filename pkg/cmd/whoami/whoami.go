@@ -66,18 +66,18 @@ func NewCmdWhoami(f *cmdutil.Factory) *cobra.Command {
 				if err != nil {
 					return fmt.Errorf("filter fields: %w", err)
 				}
-				fmt.Fprintln(f.IOStreams.Out, string(out))
+				_, _ = fmt.Fprintln(f.IOStreams.Out, string(out))
 				return nil
 			}
 
-			fmt.Fprintf(f.IOStreams.Out, "Logged in to %s as %s (project: %s)\n", host, user.ID, project)
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "Logged in to %s as %s (project: %s)\n", host, user.ID, project)
 			if user.Name != "" {
-				fmt.Fprintf(f.IOStreams.Out, "Name:    %s\n", user.Name)
+				_, _ = fmt.Fprintf(f.IOStreams.Out, "Name:    %s\n", user.Name)
 			}
 			if user.Email != "" {
-				fmt.Fprintf(f.IOStreams.Out, "Email:   %s\n", user.Email)
+				_, _ = fmt.Fprintf(f.IOStreams.Out, "Email:   %s\n", user.Email)
 			}
-			fmt.Fprintf(f.IOStreams.Out, "Project: %s\n", projectURL)
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "Project: %s\n", projectURL)
 			return nil
 		},
 	}

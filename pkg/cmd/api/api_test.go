@@ -33,7 +33,7 @@ func TestApiCmd_injectsAuthHeader(t *testing.T) {
 		Config: func() (*config.Config, error) {
 			return config.New(t.TempDir() + "/config.yml"), nil
 		},
-		HttpClient: func() (*http.Client, error) { return http.DefaultClient, nil },
+		HTTPClient: func() (*http.Client, error) { return http.DefaultClient, nil },
 	}
 
 	cmd := api.NewCmdApi(f)
@@ -70,7 +70,7 @@ func TestApiCmd_projectSubstitution(t *testing.T) {
 		Config: func() (*config.Config, error) {
 			return config.New(t.TempDir() + "/config.yml"), nil
 		},
-		HttpClient: func() (*http.Client, error) { return http.DefaultClient, nil },
+		HTTPClient: func() (*http.Client, error) { return http.DefaultClient, nil },
 	}
 
 	cmd := api.NewCmdApi(f)

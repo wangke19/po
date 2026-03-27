@@ -71,7 +71,7 @@ func runApi(f *cmdutil.Factory, opts *apiOptions) error {
 		}
 	}
 
-	httpClient, err := f.HttpClient()
+	httpClient, err := f.HTTPClient()
 	if err != nil {
 		return err
 	}

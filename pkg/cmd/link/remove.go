@@ -7,6 +7,7 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
+// NewCmdRemove returns the 'link remove' command.
 func NewCmdRemove(f *cmdutil.Factory) *cobra.Command {
 	var role string
 
@@ -24,7 +25,7 @@ func NewCmdRemove(f *cmdutil.Factory) *cobra.Command {
 				return fmt.Errorf("remove link: %w", err)
 			}
 
-			fmt.Fprintf(f.IOStreams.Out, "Removed link %s -> %s (role: %s)\n", args[0], args[1], role)
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "Removed link %s -> %s (role: %s)\n", args[0], args[1], role)
 			return nil
 		},
 	}

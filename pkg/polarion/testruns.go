@@ -8,6 +8,7 @@ import (
 	"strings"
 )
 
+// ListTestRuns searches for test runs matching a query.
 func (c *Client) ListTestRuns(ctx context.Context, query string, limit int) ([]TestRun, error) {
 	path := fmt.Sprintf("/projects/%s/testruns?page%%5Bsize%%5D=%d&fields%%5Btestruns%%5D=title,status,templateId", c.project, limit)
 	if query != "" {
@@ -45,6 +46,7 @@ func (c *Client) ListTestRuns(ctx context.Context, query string, limit int) ([]T
 	return runs, nil
 }
 
+// GetTestRun retrieves a single test run by ID.
 func (c *Client) GetTestRun(ctx context.Context, id string) (*TestRun, error) {
 	path := fmt.Sprintf("/projects/%s/testruns/%s?fields%%5Btestruns%%5D=title,status,templateId", c.project, stripProject(id))
 	data, err := c.makeRequest(ctx, "GET", path, nil)
@@ -75,6 +77,7 @@ func (c *Client) GetTestRun(ctx context.Context, id string) (*TestRun, error) {
 	}, nil
 }
 
+// CreateTestRun creates a new test run.
 func (c *Client) CreateTestRun(ctx context.Context, in TestRunInput) (*TestRun, error) {
 	body := map[string]any{
 		"data": []map[string]any{{
@@ -105,6 +108,7 @@ func (c *Client) CreateTestRun(ctx context.Context, in TestRunInput) (*TestRun, 
 	return c.GetTestRun(ctx, resp.Data[0].ID)
 }
 
+// UpdateTestRun modifies an existing test run.
 func (c *Client) UpdateTestRun(ctx context.Context, id string, in TestRunInput) (*TestRun, error) {
 	id = stripProject(id)
 	attrs := map[string]any{}
@@ -129,6 +133,7 @@ func (c *Client) UpdateTestRun(ctx context.Context, id string, in TestRunInput) 
 	return c.GetTestRun(ctx, id)
 }
 
+// DeleteTestRun permanently removes a test run.
 func (c *Client) DeleteTestRun(ctx context.Context, id string) error {
 	path := fmt.Sprintf("/projects/%s/testruns/%s", c.project, stripProject(id))
 	_, err := c.makeRequest(ctx, "DELETE", path, nil)
@@ -138,6 +143,7 @@ func (c *Client) DeleteTestRun(ctx context.Context, id string) error {
 	return nil
 }
 
+// GetTestRunRecords returns all test records for a test run.
 func (c *Client) GetTestRunRecords(ctx context.Context, runID string) ([]TestRecord, error) {
 	runID = stripProject(runID)
 	path := fmt.Sprintf("/projects/%s/testruns/%s/testrecords?fields%%5Btestrecords%%5D=result,comment", c.project, runID)

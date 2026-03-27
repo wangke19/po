@@ -2,6 +2,7 @@ package cmdutil
 
 import "fmt"
 
+// ExitError represents a command failure with an exit code.
 type ExitError struct {
 	Code int
 	Err  error
@@ -16,6 +17,7 @@ func (e *ExitError) Error() string {
 
 func (e *ExitError) Unwrap() error { return e.Err }
 
+// NewExitError creates a new exit error.
 func NewExitError(code int, msg string) *ExitError {
 	return &ExitError{Code: code, Err: fmt.Errorf("%s", msg)}
 }

@@ -28,7 +28,7 @@ func NewCmdDelete(f *cmdutil.Factory) *cobra.Command {
 				return fmt.Errorf("delete work item %q: %w", args[0], err)
 			}
 
-			fmt.Fprintf(f.IOStreams.Out, "Deleted work item %s\n", args[0])
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "Deleted work item %s\n", args[0])
 			return nil
 		},
 	}

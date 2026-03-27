@@ -48,7 +48,7 @@ Keys:
 				return fmt.Errorf("unknown key %q: valid keys are project, verify-ssl", key)
 			}
 
-			fmt.Fprintf(f.IOStreams.Out, "Set %s.%s = %s\n", hostname, key, value)
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "Set %s.%s = %s\n", hostname, key, value)
 			return nil
 		},
 	}

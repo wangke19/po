@@ -40,15 +40,15 @@ func NewCmdStatus(f *cmdutil.Factory) *cobra.Command {
 				if err != nil {
 					return fmt.Errorf("filter fields: %w", err)
 				}
-				fmt.Fprintln(f.IOStreams.Out, string(out))
+				_, _ = fmt.Fprintln(f.IOStreams.Out, string(out))
 				return nil
 			}
 
-			fmt.Fprintf(f.IOStreams.Out, "Total:   %d\n", progress.Total)
-			fmt.Fprintf(f.IOStreams.Out, "Passed:  %d\n", progress.Passed)
-			fmt.Fprintf(f.IOStreams.Out, "Failed:  %d\n", progress.Failed)
-			fmt.Fprintf(f.IOStreams.Out, "Blocked: %d\n", progress.Blocked)
-			fmt.Fprintf(f.IOStreams.Out, "Not run: %d\n", progress.NotRun)
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "Total:   %d\n", progress.Total)
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "Passed:  %d\n", progress.Passed)
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "Failed:  %d\n", progress.Failed)
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "Blocked: %d\n", progress.Blocked)
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "Not run: %d\n", progress.NotRun)
 			return nil
 		},
 	}

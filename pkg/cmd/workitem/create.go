@@ -41,11 +41,11 @@ func NewCmdCreate(f *cmdutil.Factory) *cobra.Command {
 				if err != nil {
 					return fmt.Errorf("filter fields: %w", err)
 				}
-				fmt.Fprintln(f.IOStreams.Out, string(out))
+				_, _ = fmt.Fprintln(f.IOStreams.Out, string(out))
 				return nil
 			}
 
-			fmt.Fprintf(f.IOStreams.Out, "Created %s %s\n%s\n", wiType, item.ID, item.URL)
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "Created %s %s\n%s\n", wiType, item.ID, item.URL)
 			return nil
 		},
 	}

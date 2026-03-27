@@ -52,11 +52,11 @@ func NewCmdEdit(f *cmdutil.Factory) *cobra.Command {
 				if err != nil {
 					return fmt.Errorf("filter fields: %w", err)
 				}
-				fmt.Fprintln(f.IOStreams.Out, string(out))
+				_, _ = fmt.Fprintln(f.IOStreams.Out, string(out))
 				return nil
 			}
 
-			fmt.Fprintf(f.IOStreams.Out, "Updated %s\n", args[0])
+			_, _ = fmt.Fprintf(f.IOStreams.Out, "Updated %s\n", args[0])
 			return nil
 		},
 	}

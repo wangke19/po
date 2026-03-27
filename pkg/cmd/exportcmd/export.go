@@ -5,6 +5,7 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
+// NewCmdExport returns the 'export' command.
 func NewCmdExport(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "export <command>",

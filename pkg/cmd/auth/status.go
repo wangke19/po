@@ -65,12 +65,12 @@ func NewCmdStatus(f *cmdutil.Factory) *cobra.Command {
 				if err != nil {
 					return fmt.Errorf("filter fields: %w", err)
 				}
-				fmt.Fprintln(f.IOStreams.Out, string(out))
+				_, _ = fmt.Fprintln(f.IOStreams.Out, string(out))
 				return nil
 			}
 
 			for _, s := range statuses {
-				fmt.Fprintf(f.IOStreams.Out, "%s\n  Project:    %s\n  Token:      %s\n  Verify SSL: %v\n",
+				_, _ = fmt.Fprintf(f.IOStreams.Out, "%s\n  Project:    %s\n  Token:      %s\n  Verify SSL: %v\n",
 					s.Host, s.Project, s.TokenSource, s.VerifySSL)
 			}
 			return nil

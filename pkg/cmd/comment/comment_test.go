@@ -75,7 +75,7 @@ func addResponse(id, authorID, created, text string) map[string]any {
 
 func TestListComments(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		json.NewEncoder(w).Encode(map[string]any{"data": []map[string]any{
+		_ = json.NewEncoder(w).Encode(map[string]any{"data": []map[string]any{
 			listCommentItem("CMT-1", "alice", "2026-01-01", "First"),
 			listCommentItem("CMT-2", "bob", "2026-01-02", "Second"),
 		}})
@@ -103,7 +103,7 @@ func TestAddComment_body(t *testing.T) {
 		data := req["data"].([]any)[0].(map[string]any)
 		attrs := data["attributes"].(map[string]any)
 		gotText = attrs["text"].(string)
-		json.NewEncoder(w).Encode(addResponse("CMT-1", "jdoe", "2026-01-01", gotText))
+		_ = json.NewEncoder(w).Encode(addResponse("CMT-1", "jdoe", "2026-01-01", gotText))
 	}))
 	defer srv.Close()
 
@@ -127,7 +127,7 @@ func TestAddComment_stdin(t *testing.T) {
 		data := req["data"].([]any)[0].(map[string]any)
 		attrs := data["attributes"].(map[string]any)
 		gotText = attrs["text"].(string)
-		json.NewEncoder(w).Encode(addResponse("CMT-1", "jdoe", "2026-01-01", gotText))
+		_ = json.NewEncoder(w).Encode(addResponse("CMT-1", "jdoe", "2026-01-01", gotText))
 	}))
 	defer srv.Close()
 

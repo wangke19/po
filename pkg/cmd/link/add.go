@@ -7,6 +7,7 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
+// NewCmdAdd returns the 'link add' command.
 func NewCmdAdd(f *cmdutil.Factory) *cobra.Command {
 	var role string
 

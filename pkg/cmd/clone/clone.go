@@ -5,6 +5,7 @@ import (
 	"github.com/wangke19/po/pkg/cmdutil"
 )
 
+// NewCmdClone returns the 'clone' command.
 func NewCmdClone(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "clone <command>",
