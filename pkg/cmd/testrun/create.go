@@ -16,19 +16,19 @@ func NewCmdCreate(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "create",
 		Short: "Create a new test run",
-		RunE: func(_ *cobra.Command, _ []string) error {
+		RunE: func(c *cobra.Command, _ []string) error {
 			client, err := f.PolarionClient()
 			if err != nil {
 				return err
 			}
-			run, err := client.CreateTestRun(cmd.Context(), polarion.TestRunInput{
+			run, err := client.CreateTestRun(c.Context(), polarion.TestRunInput{
 				Title:    title,
 				Template: template,
 			})
 			if err != nil {
 				return fmt.Errorf("create test run: %w", err)
 			}
-			if cmd.Flags().Changed("json") {
+			if c.Flags().Changed("json") {
 				fields := strings.Split(jsonFields, ",")
 				if jsonFields == "" {
 					fields = nil

@@ -19,7 +19,7 @@ func TestApiCmd_injectsAuthHeader(t *testing.T) {
 		gotAuth = r.Header.Get("Authorization")
 		_, _ = w.Write([]byte(`{"data":"ok"}`))
 	}))
-	defer srv.Close()
+	defer func() { srv.Close() }()
 
 	t.Setenv("POLARION_TOKEN", "test-bearer-token")
 	t.Setenv("POLARION_PROJECT", "PROJ")
@@ -36,7 +36,7 @@ func TestApiCmd_injectsAuthHeader(t *testing.T) {
 		HTTPClient: func() (*http.Client, error) { return http.DefaultClient, nil },
 	}
 
-	cmd := api.NewCmdApi(f)
+	cmd := api.NewCmdAPI(f)
 	cmd.SetArgs([]string{"/projects/{project}/workitems"})
 	if err := cmd.Execute(); err != nil {
 		t.Fatalf("execute: %v", err)
@@ -56,7 +56,7 @@ func TestApiCmd_projectSubstitution(t *testing.T) {
 		gotPath = r.URL.Path
 		_, _ = w.Write([]byte(`{}`))
 	}))
-	defer srv.Close()
+	defer func() { srv.Close() }()
 
 	t.Setenv("POLARION_TOKEN", "tok")
 	t.Setenv("POLARION_PROJECT", "MY_PROJ")
@@ -73,7 +73,7 @@ func TestApiCmd_projectSubstitution(t *testing.T) {
 		HTTPClient: func() (*http.Client, error) { return http.DefaultClient, nil },
 	}
 
-	cmd := api.NewCmdApi(f)
+	cmd := api.NewCmdAPI(f)
 	cmd.SetArgs([]string{"/projects/{project}/workitems"})
 	if err := cmd.Execute(); err != nil {
 		t.Fatalf("execute: %v", err)

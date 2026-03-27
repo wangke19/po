@@ -33,7 +33,7 @@ func NewCmdAPI(f *cmdutil.Factory) *cobra.Command {
 		Args:  cobra.ExactArgs(1),
 		RunE: func(_ *cobra.Command, args []string) error {
 			opts.endpoint = args[0]
-			return runApi(f, opts)
+			return runAPI(f, opts)
 		},
 	}
 

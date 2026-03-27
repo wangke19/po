@@ -17,13 +17,13 @@ func NewCmdCreate(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "create",
 		Short: "Create a work item",
-		RunE: func(_ *cobra.Command, _ []string) error {
+		RunE: func(c *cobra.Command, _ []string) error {
 			client, err := f.PolarionClient()
 			if err != nil {
 				return err
 			}
 
-			item, err := client.CreateWorkItem(cmd.Context(), polarion.WorkItemInput{
+			item, err := client.CreateWorkItem(c.Context(), polarion.WorkItemInput{
 				Type:        wiType,
 				Title:       title,
 				Status:      status,
@@ -33,7 +33,7 @@ func NewCmdCreate(f *cmdutil.Factory) *cobra.Command {
 				return fmt.Errorf("create work item: %w", err)
 			}
 
-			if cmd.Flags().Changed("json") {
+			if c.Flags().Changed("json") {
 				fields := strings.Split(jsonFields, ",")
 				if jsonFields == "" {
 					fields = nil
